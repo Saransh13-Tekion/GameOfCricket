@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GameOfCricketApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GameOfCricketApplication.class, args);
-	}
 
+		SpringApplication.run(GameOfCricketApplication.class, args);
+		Match m = new Match(); // Starting of Match
+	}
 }
