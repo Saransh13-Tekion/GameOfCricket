@@ -1,4 +1,4 @@
-package com.tekion.GameOfCricket;
+package com.tekion.GameOfCricket.Models;
 
 public class Player {
     int runs = 0;
