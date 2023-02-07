@@ -1,49 +1,26 @@
 package com.tekion.GameOfCricket.Models;
 
+import com.tekion.GameOfCricket.Services.TeamService;
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class Team {
 
     List<Player> players;
     private String name;
     private int totalRuns = 0;
     private int wickets = 0;
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public String getName(){
-        return this.name;
-    }
-
-    public int getTotalRuns(){
-        return this.totalRuns;
-    }
-
-    public int getWickets(){
-        return this.wickets;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public void setTotalRuns(int totalRuns){
-        this.totalRuns = totalRuns;
-    }
-
-    public void setWickets(int wickets){
-        this.wickets = wickets;
-    }
+    private int oversPlayed = 0;
+    private int ballsPlayed = 0;
+    boolean isAllOut = false;
 
     //Initializing Team arraylist
-    public Team(String name){
+    public Team(String name,int noOfBowlers){
         this.name = name;
         this.players = new ArrayList<Player>();
-        for(int i = 0;i<11;i++){
-            players.add(new Player());
-        }
+        TeamService.makeTeam(this.players,noOfBowlers);
     }
 }

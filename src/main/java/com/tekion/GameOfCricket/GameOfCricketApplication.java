@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Scanner;
 
+//Removed Boiler Plate code
+
 @SpringBootApplication
 public class GameOfCricketApplication {
 
