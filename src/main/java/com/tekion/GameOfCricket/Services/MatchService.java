@@ -26,6 +26,7 @@ public class MatchService {
         int noOfBowlers = sc.nextInt();
         currentMatch.setFirstTeam(new Team("India",noOfBowlers)); // Initializing first team
         currentMatch.setSecondTeam(new Team("Australia",noOfBowlers)); // Initializing second team
+
         if(tossResult == 0) { // Playing match according to the output of toss
             this.firstTeamName = currentMatch.getFirstTeam().getName();
             play(currentMatch.getFirstTeam(),true);
