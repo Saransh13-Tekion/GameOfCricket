@@ -1,7 +1,6 @@
 package com.tekion.GameOfCricket.Models;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
-import com.tekion.GameOfCricket.Services.PlayerService;
 import lombok.Data;
 
 import java.util.ArrayList;

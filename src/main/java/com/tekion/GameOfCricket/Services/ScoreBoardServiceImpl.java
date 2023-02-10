@@ -1,11 +1,11 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
-import com.tekion.GameOfCricket.Models.Constants;
+import com.tekion.GameOfCricket.Utilities.Constants;
 import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
 
-public class ScoreBoardService {
+public class ScoreBoardServiceImpl implements ScoreBoardService{
     public void printScoreBoard(Team team){
         System.out.println(team.getName() + ":");
         System.out.println("Total Runs Scored: " + team.getTotalRuns());

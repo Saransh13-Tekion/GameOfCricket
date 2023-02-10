@@ -2,24 +2,26 @@ package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.*;
+import com.tekion.GameOfCricket.Utilities.Constants;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class MatchService{
+public class MatchServiceImpl implements MatchService{
     String firstTeamName;
-    Match currentMatch;
+    private final Match currentMatch;
     int tossResult = 0;
     private int target = 0;
-    private PlayerService playerService;
-    PitchService pitch;
-    ScoreBoardService scoreBoardService;
+    private final PlayerService playerService;
+    private final PitchServiceImpl pitch;
+    private final ScoreBoardService scoreBoardService;
 
-    public MatchService(int totalOvers,PlayerService playerService){
+    public MatchServiceImpl(int totalOvers, PlayerService playerService, Match currentMatch, ScoreBoardService scoreBoardService,PitchServiceImpl pitch){
         this.playerService = playerService;
-        this.currentMatch = new Match();
-        this.scoreBoardService = new ScoreBoardService();
+        this.currentMatch = currentMatch;
+        this.scoreBoardService = scoreBoardService;
+        this.pitch = pitch;
         currentMatch.setTotalOvers(totalOvers);
     }
 
@@ -28,8 +30,8 @@ public class MatchService{
         System.out.print("Number of Players in each team is 11, Please tell me how many bowlers are in one Team(Valid Input: 3-7): ");
         Scanner sc = new Scanner(System.in);
         int noOfBowlers = sc.nextInt();
-        currentMatch.setFirstTeam(new Team("India",noOfBowlers,new TeamService())); // Initializing first team
-        currentMatch.setSecondTeam(new Team("Australia",noOfBowlers,new TeamService())); // Initializing second team
+        currentMatch.setFirstTeam(new Team("India",noOfBowlers,new TeamServiceImpl())); // Initializing first team
+        currentMatch.setSecondTeam(new Team("Australia",noOfBowlers,new TeamServiceImpl())); // Initializing second team
 
         if(tossResult == 0) { // Playing match according to the output of toss
             this.firstTeamName = currentMatch.getFirstTeam().getName();
@@ -55,7 +57,6 @@ public class MatchService{
                 allBowlers.add(player);
             }
         }
-        this.pitch = new PitchService();
         pitch.openers(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
         Player striker = pitch.getStriker();
         Player nonStriker = pitch.getNonStriker();

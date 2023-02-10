@@ -4,7 +4,7 @@ import com.tekion.GameOfCricket.Models.Player;
 import lombok.Data;
 
 @Data
-public class PitchService {
+public class PitchServiceImpl implements PitchService{
     private Player striker, nonStriker;
     public void openers(Player striker, Player nonStriker){
         this.striker = striker;

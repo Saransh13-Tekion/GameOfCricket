@@ -1,13 +1,12 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
-import com.tekion.GameOfCricket.Models.Constants;
+import com.tekion.GameOfCricket.Utilities.Constants;
 import com.tekion.GameOfCricket.Models.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TeamService {
+public class TeamServiceImpl {
     public void makeTeam(List<Player> players, int noOfBowlers){
         for(int i = 0;i< Constants.totalPlayers ;i++){
             if(i<Constants.totalPlayers - noOfBowlers) {

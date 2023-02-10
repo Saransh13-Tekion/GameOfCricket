@@ -1,6 +1,6 @@
 package com.tekion.GameOfCricket.Models;
 
-import com.tekion.GameOfCricket.Services.TeamService;
+import com.tekion.GameOfCricket.Services.TeamServiceImpl;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class Team {
     boolean isAllOut = false;
 
     //Initializing Team arraylist
-    public Team(String name,int noOfBowlers,TeamService teamService){
+    public Team(String name, int noOfBowlers, TeamServiceImpl teamService){
         this.name = name;
         this.players = new ArrayList<Player>();
         teamService.makeTeam(this.players,noOfBowlers);

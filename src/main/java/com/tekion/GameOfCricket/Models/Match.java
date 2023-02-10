@@ -1,7 +1,5 @@
 package com.tekion.GameOfCricket.Models;
 
-import com.tekion.GameOfCricket.Models.Team;
-import com.tekion.GameOfCricket.Services.MatchService;
 import lombok.Data;
 
 

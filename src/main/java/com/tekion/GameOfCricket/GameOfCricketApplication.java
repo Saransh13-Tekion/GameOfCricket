@@ -1,9 +1,10 @@
 package com.tekion.GameOfCricket;
 
 import com.tekion.GameOfCricket.Models.Match;
-import com.tekion.GameOfCricket.Services.MatchService;
-import com.tekion.GameOfCricket.Services.PlayerService;
-import org.springframework.boot.SpringApplication;
+import com.tekion.GameOfCricket.Services.MatchServiceImpl;
+import com.tekion.GameOfCricket.Services.PitchServiceImpl;
+import com.tekion.GameOfCricket.Services.PlayerServiceImpl;
+import com.tekion.GameOfCricket.Services.ScoreBoardServiceImpl;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Scanner;
@@ -17,7 +18,7 @@ public class GameOfCricketApplication {
 
 		System.out.print("Enter Number of Overs: ");
 		Scanner sc = new Scanner(System.in);
-		MatchService match = new MatchService(sc.nextInt(),new PlayerService()); // Asking User for Number of Overs.
+		MatchServiceImpl match = new MatchServiceImpl(sc.nextInt(),new PlayerServiceImpl(),new Match(),new ScoreBoardServiceImpl(),new PitchServiceImpl()); // Asking User for Number of Overs.
 		match.startMatch();
 	}
 }
