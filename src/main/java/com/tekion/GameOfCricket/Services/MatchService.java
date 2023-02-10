@@ -1,21 +1,25 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class MatchService {
+public class MatchService{
     String firstTeamName;
     Match currentMatch;
     int tossResult = 0;
     private int target = 0;
-
+    private PlayerService playerService;
     PitchService pitch;
+    ScoreBoardService scoreBoardService;
 
-    public MatchService(int totalOvers){
+    public MatchService(int totalOvers,PlayerService playerService){
+        this.playerService = playerService;
         this.currentMatch = new Match();
+        this.scoreBoardService = new ScoreBoardService();
         currentMatch.setTotalOvers(totalOvers);
     }
 
@@ -24,8 +28,8 @@ public class MatchService {
         System.out.print("Number of Players in each team is 11, Please tell me how many bowlers are in one Team(Valid Input: 3-7): ");
         Scanner sc = new Scanner(System.in);
         int noOfBowlers = sc.nextInt();
-        currentMatch.setFirstTeam(new Team("India",noOfBowlers)); // Initializing first team
-        currentMatch.setSecondTeam(new Team("Australia",noOfBowlers)); // Initializing second team
+        currentMatch.setFirstTeam(new Team("India",noOfBowlers,new TeamService())); // Initializing first team
+        currentMatch.setSecondTeam(new Team("Australia",noOfBowlers,new TeamService())); // Initializing second team
 
         if(tossResult == 0) { // Playing match according to the output of toss
             this.firstTeamName = currentMatch.getFirstTeam().getName();
@@ -37,8 +41,8 @@ public class MatchService {
             play(currentMatch.getSecondTeam(),true,currentMatch.getFirstTeam());
             play(currentMatch.getFirstTeam(),false,currentMatch.getSecondTeam());
         }
-        ScoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
-        ScoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
+        scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
+        scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
     }
 
     // Method for paying innings, taking battingTeam and current innings argument
@@ -47,7 +51,7 @@ public class MatchService {
     public void play(Team battingTeam, boolean isFirstInnings,Team bowlingTeam){
         ArrayList<Player>allBowlers = new ArrayList<>();
         for(Player player : bowlingTeam.getPlayers()){
-            if(player.getRole() == "Bowler"){
+            if(player.getRole() == PlayerRole.BOWLER){
                 allBowlers.add(player);
             }
         }
@@ -64,19 +68,19 @@ public class MatchService {
             if(battingTeam.isAllOut() == true)
                 break;
             currentBowler = changeBowler(currentBowler,allBowlers);
-            for(currentBall = 0; currentBall <6; currentBall++){
-                if(battingTeam.getWickets() == 10) {
+            for(currentBall = 0; currentBall < Constants.ballsInAnOver; currentBall++){
+                if(battingTeam.getWickets() == Constants.totalWickets) {
                     battingTeam.setAllOut(true);
                     break;
                 }
-                int currRuns = PlayerService.getRuns(striker);
+                int currRuns = playerService.getRuns(striker);
                 striker.setBallsPlayed(striker.getBallsPlayed()+1);
-                if(currRuns == 7) {
+                if(currRuns == Constants.wicketBall) {
                     battingTeam.setWickets(battingTeam.getWickets() + 1);
                     striker.setGotOut(true);
                     currentBowler.setWicketsTaken(currentBowler.getWicketsTaken()+1);
-                    if(index <= 10) {
-                        pitch.getOut(battingTeam.getPlayers().get(index));
+                    if(index <= Constants.totalWickets) {
+                        pitch.nextPlayer(battingTeam.getPlayers().get(index));
                         striker = pitch.getStriker();
                         index++;
                     }
@@ -93,7 +97,7 @@ public class MatchService {
                 if(isFirstInnings == false){
                     if(battingTeam.getTotalRuns() >= target){
                         System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + (currentBall) + " Overs.");
-                        System.out.println(battingTeam.getName() + " won the match by " + (10 - battingTeam.getWickets()) + " wickets.");
+                        System.out.println(battingTeam.getName() + " won the match by " + (Constants.totalWickets - battingTeam.getWickets()) + " wickets.");
                         return;
                     }
                 }

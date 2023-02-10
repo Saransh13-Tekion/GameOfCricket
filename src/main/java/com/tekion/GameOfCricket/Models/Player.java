@@ -1,9 +1,11 @@
 package com.tekion.GameOfCricket.Models;
 
+import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Services.PlayerService;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class Player {
@@ -13,11 +15,11 @@ public class Player {
     private boolean gotOut;
     private int runs = 0;
     private int ballsPlayed = 0;
-    private String role;
+    private PlayerRole role;
     Player wicketTakenBy;
-    ArrayList<Player> TakenWickets = new ArrayList<>();
+    List<Player> TakenWickets = new ArrayList<>();
 
-    public Player(String role){
+    public Player(PlayerRole role){
         this.role = role;
     }
 

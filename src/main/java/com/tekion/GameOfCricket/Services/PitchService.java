@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class PitchService {
     private Player striker, nonStriker;
-    public void openers(Player player1, Player player2){
-        this.striker = player1;
-        this.nonStriker = player2;
+    public void openers(Player striker, Player nonStriker){
+        this.striker = striker;
+        this.nonStriker = nonStriker;
     }
 
     public void swap(){
@@ -17,7 +17,7 @@ public class PitchService {
         this.nonStriker = temp;
     }
 
-    public void getOut(Player player){
+    public void nextPlayer(Player player){
         this.striker = player;
     }
 }

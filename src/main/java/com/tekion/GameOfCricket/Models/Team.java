@@ -18,9 +18,9 @@ public class Team {
     boolean isAllOut = false;
 
     //Initializing Team arraylist
-    public Team(String name,int noOfBowlers){
+    public Team(String name,int noOfBowlers,TeamService teamService){
         this.name = name;
         this.players = new ArrayList<Player>();
-        TeamService.makeTeam(this.players,noOfBowlers);
+        teamService.makeTeam(this.players,noOfBowlers);
     }
 }

@@ -1,17 +1,19 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.Enums.PlayerRole;
+import com.tekion.GameOfCricket.Models.Constants;
 import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
 
 public class ScoreBoardService {
-    public static void printScoreBoard(Team team){
+    public void printScoreBoard(Team team){
         System.out.println(team.getName() + ":");
         System.out.println("Total Runs Scored: " + team.getTotalRuns());
         System.out.println("Batsman\t\t\tRuns\tBalls");
-        int notBatted = 11;
+        int playerNotBatted = Constants.totalPlayers;
         for(Player player:team.getPlayers()){
             if(player.getBallsPlayed() != 0) {
-                int bufferSize = 10-player.getName().length();
+                int bufferSize = Constants.totalWickets - player.getName().length();
                 System.out.print(player.getName());
 
                 for(int i=0;i<bufferSize;i++){
@@ -24,10 +26,10 @@ public class ScoreBoardService {
                 } else {
                     System.out.println(player.getRuns() + "*\t\t" + player.getBallsPlayed());
                 }
-                notBatted--;
+                playerNotBatted--;
             }
         }
-        if(notBatted>0) {
+        if(playerNotBatted >0) {
             System.out.print("Yet to Bat: ");
             for (Player player : team.getPlayers()) {
                 if (player.getBallsPlayed() == 0) {
@@ -39,8 +41,8 @@ public class ScoreBoardService {
         System.out.println("Bowling Statistics");
         System.out.println("Bowlers \t Wickets");
         for(Player bowler : team.getPlayers()){
-            if(bowler.getRole() == "Bowler"){
-                int bufferSize = 10-bowler.getName().length();
+            if(bowler.getRole() == PlayerRole.BOWLER){
+                int bufferSize = Constants.totalWickets -bowler.getName().length();
                 System.out.print(bowler.getName());
                 for(int i=0;i<bufferSize;i++){
                     System.out.print(" ");

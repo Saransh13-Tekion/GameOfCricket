@@ -14,5 +14,4 @@ public class Match {
     public Team getFirstTeam() {
         return firstTeam;
     }
-
 }
