@@ -6,7 +6,7 @@ import com.tekion.GameOfCricket.Models.Player;
 
 import java.util.List;
 
-public class TeamServiceImpl {
+public class TeamServiceImpl implements TeamService{
     public void makeTeam(List<Player> players, int noOfBowlers){
         for(int i = 0;i< Constants.totalPlayers ;i++){
             if(i<Constants.totalPlayers - noOfBowlers) {
