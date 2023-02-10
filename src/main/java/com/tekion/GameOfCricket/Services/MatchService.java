@@ -5,7 +5,7 @@ import com.tekion.GameOfCricket.Models.Player;
 import java.util.ArrayList;
 
 public interface MatchService {
-    public void startMatch();
-    public int toss();
-    public Player changeBowler(Player currentBowler, ArrayList<Player> allBowlers);
+    void startMatch();
+    int toss();
+    Player changeBowler(Player currentBowler, ArrayList<Player> allBowlers);
 }
