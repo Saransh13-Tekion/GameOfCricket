@@ -9,11 +9,11 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
     public void printScoreBoard(Team team){
         System.out.println(team.getName() + ":");
         System.out.println("Total Runs Scored: " + team.getTotalRuns());
-        System.out.println("Batsman\t\t\tRuns\tBalls");
+        System.out.println("Batsman\t\t\t\t\t\tRuns\tBalls");
         int playerNotBatted = Constants.totalPlayers;
         for(Player player:team.getPlayers()){
             if(player.getBallsPlayed() != 0) {
-                int bufferSize = Constants.totalWickets - player.getName().length();
+                int bufferSize = 20 - player.getName().length();
                 System.out.print(player.getName());
 
                 for(int i=0;i<bufferSize;i++){
@@ -39,10 +39,10 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
         }
         System.out.println("");
         System.out.println("Bowling Statistics");
-        System.out.println("Bowlers \t Wickets");
+        System.out.println("Bowlers \t\t\t Wickets");
         for(Player bowler : team.getPlayers()){
             if(bowler.getRole() == PlayerRole.BOWLER){
-                int bufferSize = Constants.totalWickets -bowler.getName().length();
+                int bufferSize = 20 -bowler.getName().length();
                 System.out.print(bowler.getName());
                 for(int i=0;i<bufferSize;i++){
                     System.out.print(" ");
