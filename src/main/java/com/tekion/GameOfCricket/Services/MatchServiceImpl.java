@@ -3,43 +3,44 @@ package com.tekion.GameOfCricket.Services;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Utilities.Constants;
+import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import lombok.Data;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+@Data
 public class MatchServiceImpl implements MatchService{
-    String firstTeamName;
     private final Match currentMatch;
     int tossResult = 0;
     private int target = 0;
     private final PlayerService playerService;
     private final PitchServiceImpl pitch;
-    private final ScoreBoardService scoreBoardService;
 
-    public MatchServiceImpl(int totalOvers, PlayerService playerService, Match currentMatch, ScoreBoardService scoreBoardService,PitchServiceImpl pitch){
+    private final ScoreBoardService scoreBoardService ;
+    public MatchServiceImpl(Integer totalOvers, PlayerService playerService, @NotNull Match currentMatch, PitchServiceImpl pitch, ScoreBoardService scoreBoardService){
         this.playerService = playerService;
         this.currentMatch = currentMatch;
         this.scoreBoardService = scoreBoardService;
         this.pitch = pitch;
         currentMatch.setTotalOvers(totalOvers);
     }
-
+    @Override
     public void startMatch(){
         tossResult = toss(); // Running toss method
         System.out.print("Number of Players in each team is 11, Please tell me how many bowlers are in one Team(Valid Input: 3-7): ");
         Scanner sc = new Scanner(System.in);
         int noOfBowlers = sc.nextInt();
-        currentMatch.setFirstTeam(new Team("India",noOfBowlers,new TeamServiceImpl())); // Initializing first team
-        currentMatch.setSecondTeam(new Team("Australia",noOfBowlers,new TeamServiceImpl())); // Initializing second team
-
+        currentMatch.setFirstTeam(new Team("India",noOfBowlers,1)); // Initializing first team
+        currentMatch.setSecondTeam(new Team("Australia",noOfBowlers,2)); // Initializing second team
         if(tossResult == 0) { // Playing match according to the output of toss
-            this.firstTeamName = currentMatch.getFirstTeam().getName();
             play(currentMatch.getFirstTeam(),true,currentMatch.getSecondTeam());
             play(currentMatch.getSecondTeam(),false,currentMatch.getFirstTeam());
         }
         else {
-            this.firstTeamName = currentMatch.getSecondTeam().getName();
             play(currentMatch.getSecondTeam(),true,currentMatch.getFirstTeam());
             play(currentMatch.getFirstTeam(),false,currentMatch.getSecondTeam());
         }
@@ -50,6 +51,7 @@ public class MatchServiceImpl implements MatchService{
     // Method for paying innings, taking battingTeam and current innings argument
     // isFirstInnings will be true for first innings and false for second innings
     //This function will take both batting and bowling team.
+    @Override
     public void play(Team battingTeam, boolean isFirstInnings,Team bowlingTeam){
         ArrayList<Player>allBowlers = new ArrayList<>();
         for(Player player : bowlingTeam.getPlayers()){
@@ -99,6 +101,7 @@ public class MatchServiceImpl implements MatchService{
                     if(battingTeam.getTotalRuns() >= target){
                         System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + (currentBall) + " Overs.");
                         System.out.println(battingTeam.getName() + " won the match by " + (Constants.totalWickets - battingTeam.getWickets()) + " wickets.");
+                        currentMatch.setWinner(battingTeam.getName());
                         return;
                     }
                 }
@@ -115,10 +118,11 @@ public class MatchServiceImpl implements MatchService{
             target = battingTeam.getTotalRuns() + 1;
         }
         else{
-            System.out.println(this.firstTeamName + " won the match by " + (target - battingTeam.getTotalRuns()) + " runs.");
+            System.out.println(bowlingTeam.getName() + " won the match by " + (target - battingTeam.getTotalRuns()) + " runs.");
+            currentMatch.setWinner(bowlingTeam.getName());
         }
     }
-    
+    @Override
     public Player changeBowler(Player currentBowler, ArrayList<Player>allBowlers){
         int length = allBowlers.size();
         int index = (int)(Math.random()*length);
@@ -129,7 +133,7 @@ public class MatchServiceImpl implements MatchService{
         allBowlers.remove(index);
         return currentBowler;
     }
-
+    @Override
     public int toss() {
         return (int) (Math.random() * 2);
     }

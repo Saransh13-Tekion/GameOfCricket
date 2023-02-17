@@ -1,24 +1,22 @@
 package com.tekion.GameOfCricket;
 
 import com.tekion.GameOfCricket.Models.Match;
-import com.tekion.GameOfCricket.Services.MatchServiceImpl;
-import com.tekion.GameOfCricket.Services.PitchServiceImpl;
-import com.tekion.GameOfCricket.Services.PlayerServiceImpl;
-import com.tekion.GameOfCricket.Services.ScoreBoardServiceImpl;
+import com.tekion.GameOfCricket.Services.*;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 @SpringBootApplication
 public class GameOfCricketApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
-		//SpringApplication.run(GameOfCricketApplication.class, args);
+		SpringApplication.run(GameOfCricketApplication.class, args);
 
-		System.out.print("Enter Number of Overs: ");
-		Scanner sc = new Scanner(System.in);
-		MatchServiceImpl match = new MatchServiceImpl(sc.nextInt(),new PlayerServiceImpl(),new Match(),new ScoreBoardServiceImpl(),new PitchServiceImpl()); // Asking User for Number of Overs.
-		match.startMatch();
+		//MatchServiceImpl match = new MatchServiceImpl(20,new PlayerServiceImpl(),new Match(),new PitchServiceImpl(),new ScoreBoardServiceImpl()); // Asking User for Number of Overs.
+		//for(int i = 0;i<10;i++)
+		//	match.startMatch();
 	}
 }
