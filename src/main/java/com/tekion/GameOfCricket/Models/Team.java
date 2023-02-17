@@ -1,12 +1,20 @@
 package com.tekion.GameOfCricket.Models;
 
+import com.tekion.GameOfCricket.Entity.TeamEntity;
+import com.tekion.GameOfCricket.Repository.PlayerRepository;
 import com.tekion.GameOfCricket.Services.TeamServiceImpl;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class Team {
 
     List<Player> players;
@@ -16,11 +24,11 @@ public class Team {
     private int oversPlayed = 0;
     private int ballsPlayed = 0;
     boolean isAllOut = false;
+    private Long teamID;
 
-    //Initializing Team arraylist
-    public Team(String name, int noOfBowlers, TeamServiceImpl teamService){
-        this.name = name;
-        this.players = new ArrayList<Player>();
-        teamService.makeTeam(this.players,noOfBowlers);
+    public Team(TeamEntity team) {
+        this.name = team.getTeamName();
+        this.teamID = team.getTeamID();
+
     }
 }

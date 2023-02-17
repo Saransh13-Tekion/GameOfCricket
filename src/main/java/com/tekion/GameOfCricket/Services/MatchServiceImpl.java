@@ -1,55 +1,57 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.Entity.MatchEntity;
+import com.tekion.GameOfCricket.Entity.TeamEntity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.*;
+import com.tekion.GameOfCricket.Repository.MatchRepository;
 import com.tekion.GameOfCricket.Utilities.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-
+@Service
 public class MatchServiceImpl implements MatchService{
-    String firstTeamName;
-    private final Match currentMatch;
+
+    @Autowired
+    private MatchRepository matchRepository;
+    @Autowired
+    private Match currentMatch;
     int tossResult = 0;
     private int target = 0;
-    private final PlayerService playerService;
-    private final PitchServiceImpl pitch;
-    private final ScoreBoardService scoreBoardService;
-
-    public MatchServiceImpl(int totalOvers, PlayerService playerService, Match currentMatch, ScoreBoardService scoreBoardService,PitchServiceImpl pitch){
-        this.playerService = playerService;
-        this.currentMatch = currentMatch;
-        this.scoreBoardService = scoreBoardService;
-        this.pitch = pitch;
-        currentMatch.setTotalOvers(totalOvers);
-    }
-
-    public void startMatch(){
+    @Autowired
+    private PlayerService playerService;
+    @Autowired
+    private PitchService pitch;
+    @Autowired
+    private ScoreBoardService scoreBoardService ;
+    @Autowired
+    private TeamService teamService;
+    @Override
+    public void startMatch(MatchEntity matchEntity){
         tossResult = toss(); // Running toss method
-        System.out.print("Number of Players in each team is 11, Please tell me how many bowlers are in one Team(Valid Input: 3-7): ");
-        Scanner sc = new Scanner(System.in);
-        int noOfBowlers = sc.nextInt();
-        currentMatch.setFirstTeam(new Team("India",noOfBowlers,new TeamServiceImpl())); // Initializing first team
-        currentMatch.setSecondTeam(new Team("Australia",noOfBowlers,new TeamServiceImpl())); // Initializing second team
-
+        matchRepository.save(matchEntity);
+        TeamEntity firstTeam = this.teamService.getTeam(matchEntity.getFirstTeamID());
+        TeamEntity secondTeam = this.teamService.getTeam(matchEntity.getSecondTeamID());
+        currentMatch.setFirstTeam(firstTeam);
+        currentMatch.setSecondTeam(secondTeam);
         if(tossResult == 0) { // Playing match according to the output of toss
-            this.firstTeamName = currentMatch.getFirstTeam().getName();
             play(currentMatch.getFirstTeam(),true,currentMatch.getSecondTeam());
             play(currentMatch.getSecondTeam(),false,currentMatch.getFirstTeam());
         }
         else {
-            this.firstTeamName = currentMatch.getSecondTeam().getName();
             play(currentMatch.getSecondTeam(),true,currentMatch.getFirstTeam());
             play(currentMatch.getFirstTeam(),false,currentMatch.getSecondTeam());
         }
-        scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
-        scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
+       // scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
+       // scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
+
     }
 
     // Method for paying innings, taking battingTeam and current innings argument
     // isFirstInnings will be true for first innings and false for second innings
     //This function will take both batting and bowling team.
+    @Override
     public void play(Team battingTeam, boolean isFirstInnings,Team bowlingTeam){
         ArrayList<Player>allBowlers = new ArrayList<>();
         for(Player player : bowlingTeam.getPlayers()){
@@ -66,7 +68,7 @@ public class MatchServiceImpl implements MatchService{
         int currentOver = 0;
         int currentBall = 0;
         for(; currentOver < currentMatch.getTotalOvers(); currentOver++){
-            if(battingTeam.isAllOut() == true)
+            if(battingTeam.isAllOut())
                 break;
             currentBowler = changeBowler(currentBowler,allBowlers);
             for(currentBall = 0; currentBall < Constants.ballsInAnOver; currentBall++){
@@ -95,10 +97,11 @@ public class MatchServiceImpl implements MatchService{
                         nonStriker = pitch.getNonStriker();
                     }
                 }
-                if(isFirstInnings == false){
+                if(!isFirstInnings){
                     if(battingTeam.getTotalRuns() >= target){
                         System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + (currentBall) + " Overs.");
                         System.out.println(battingTeam.getName() + " won the match by " + (Constants.totalWickets - battingTeam.getWickets()) + " wickets.");
+                        currentMatch.setWinner(battingTeam.getName());
                         return;
                     }
                 }
@@ -115,10 +118,12 @@ public class MatchServiceImpl implements MatchService{
             target = battingTeam.getTotalRuns() + 1;
         }
         else{
-            System.out.println(this.firstTeamName + " won the match by " + (target - battingTeam.getTotalRuns()) + " runs.");
+            System.out.println(bowlingTeam.getName() + " won the match by " + (target - battingTeam.getTotalRuns()) + " runs.");
+            currentMatch.setWinner(bowlingTeam.getName());
         }
     }
-    
+
+    @Override
     public Player changeBowler(Player currentBowler, ArrayList<Player>allBowlers){
         int length = allBowlers.size();
         int index = (int)(Math.random()*length);
@@ -130,6 +135,7 @@ public class MatchServiceImpl implements MatchService{
         return currentBowler;
     }
 
+    @Override
     public int toss() {
         return (int) (Math.random() * 2);
     }
