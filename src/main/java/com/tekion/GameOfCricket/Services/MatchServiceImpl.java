@@ -1,42 +1,38 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.*;
+import com.tekion.GameOfCricket.Repository.MatchRepository;
 import com.tekion.GameOfCricket.Utilities.Constants;
-import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-
-@Data
+@Service
 public class MatchServiceImpl implements MatchService{
-    private final Match currentMatch;
+
+    @Autowired
+    private MatchRepository matchRepository;
+    private final Match currentMatch = null;
     int tossResult = 0;
     private int target = 0;
     private final PlayerService playerService;
     private final PitchServiceImpl pitch;
 
     private final ScoreBoardService scoreBoardService ;
-    public MatchServiceImpl(Integer totalOvers, PlayerService playerService, @NotNull Match currentMatch, PitchServiceImpl pitch, ScoreBoardService scoreBoardService){
+    public MatchServiceImpl(PlayerService playerService,PitchServiceImpl pitch, ScoreBoardService scoreBoardService){
         this.playerService = playerService;
-        this.currentMatch = currentMatch;
+      //  this.currentMatch = currentMatch;
         this.scoreBoardService = scoreBoardService;
         this.pitch = pitch;
-        currentMatch.setTotalOvers(totalOvers);
+      //  currentMatch.setTotalOvers(20);
     }
     @Override
-    public void startMatch(){
+    public void startMatch(MatchEntity matchEntity){
         tossResult = toss(); // Running toss method
-        System.out.print("Number of Players in each team is 11, Please tell me how many bowlers are in one Team(Valid Input: 3-7): ");
-        Scanner sc = new Scanner(System.in);
-        int noOfBowlers = sc.nextInt();
-        currentMatch.setFirstTeam(new Team("India",noOfBowlers,1)); // Initializing first team
-        currentMatch.setSecondTeam(new Team("Australia",noOfBowlers,2)); // Initializing second team
-        if(tossResult == 0) { // Playing match according to the output of toss
+        matchRepository.save(matchEntity);
+        /*if(tossResult == 0) { // Playing match according to the output of toss
             play(currentMatch.getFirstTeam(),true,currentMatch.getSecondTeam());
             play(currentMatch.getSecondTeam(),false,currentMatch.getFirstTeam());
         }
@@ -45,7 +41,7 @@ public class MatchServiceImpl implements MatchService{
             play(currentMatch.getFirstTeam(),false,currentMatch.getSecondTeam());
         }
         scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
-        scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
+        scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());*/
     }
 
     // Method for paying innings, taking battingTeam and current innings argument
@@ -122,6 +118,7 @@ public class MatchServiceImpl implements MatchService{
             currentMatch.setWinner(bowlingTeam.getName());
         }
     }
+
     @Override
     public Player changeBowler(Player currentBowler, ArrayList<Player>allBowlers){
         int length = allBowlers.size();
@@ -133,6 +130,7 @@ public class MatchServiceImpl implements MatchService{
         allBowlers.remove(index);
         return currentBowler;
     }
+
     @Override
     public int toss() {
         return (int) (Math.random() * 2);

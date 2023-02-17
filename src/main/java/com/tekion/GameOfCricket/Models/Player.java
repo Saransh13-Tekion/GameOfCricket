@@ -9,8 +9,6 @@ import java.util.List;
 
 @Data
 public class Player {
-
-
     private Long id;
     private String name;
     private int wicketsTaken;

@@ -8,7 +8,7 @@ import lombok.Data;
 @Table(name = "Players")
 public class PlayerEntity {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
     @Column(name = "name")
@@ -21,16 +21,4 @@ public class PlayerEntity {
     private int ballsPlayed = 0;
     @Column(name = "teamID")
     private int teamID;
-
-
-    public PlayerEntity() {
-    }
-
-    public PlayerEntity(int ballsPlayed,String name, int runs, int teamID, int wicketsTaken) {
-        this.name = name;
-        this.wicketsTaken = wicketsTaken;
-        this.runs = runs;
-        this.ballsPlayed = ballsPlayed;
-        this.teamID = teamID;
-    }
 }

@@ -27,11 +27,11 @@ public class Team {
     private int totalMatches = 0;
 
     //Initializing Team arraylist
-    public Team(String name, int noOfBowlers,int teamID){
+    public Team(String name, int noOfBowlers,TeamServiceImpl teamService,int teamID){
         this.name = name;
         this.players = new ArrayList<Player>();
         this.teamID = teamID;
-        TeamServiceImpl.makeTeam(this.players,noOfBowlers,teamID);
+        teamService.makeTeam(this.players,noOfBowlers,teamID);
     }
 
 }

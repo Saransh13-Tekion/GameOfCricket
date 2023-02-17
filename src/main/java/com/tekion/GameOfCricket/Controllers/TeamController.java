@@ -2,19 +2,24 @@ package com.tekion.GameOfCricket.Controllers;
 
 
 import com.tekion.GameOfCricket.Entity.TeamEntity;
-import com.tekion.GameOfCricket.Models.Team;
-import com.tekion.GameOfCricket.Services.TeamServiceImpl;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.tekion.GameOfCricket.Services.TeamService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/teams")
 public class TeamController {
-    @PostMapping("/addTeam")
+
+    @Autowired
+    private TeamService teamService;
+
+    @PostMapping("/add")
     public String addTeam(@RequestBody TeamEntity team){
-        TeamServiceImpl.addInTeamTable(team);
+        teamService.addTeam(team);
         return "Team Added";
+    }
+    @PostMapping("/get")
+    public TeamEntity getTeam(@RequestBody TeamEntity team){
+        return teamService.getTeam(team.getTeamID());
     }
 }

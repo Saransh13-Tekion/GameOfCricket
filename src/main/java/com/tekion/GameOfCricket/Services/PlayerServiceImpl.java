@@ -17,17 +17,15 @@ import java.util.Optional;
 public class PlayerServiceImpl implements PlayerService{
 
     @Autowired
-    private static PlayerRepository playerRepository;
+    private PlayerRepository playerRepository;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository){
-        this.playerRepository = playerRepository;
-    }
-
-    public static void addInPlayerTable(PlayerEntity player){
+    @Override
+    public void addPlayer(PlayerEntity player){
         playerRepository.save(player);
     }
 
-    public static PlayerEntity getFromPlayerTable(Long id){
+    @Override
+    public PlayerEntity getPlayer(Long id){
         return playerRepository.findById(id).orElse(null);
     }
 

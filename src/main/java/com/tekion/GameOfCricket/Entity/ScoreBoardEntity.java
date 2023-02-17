@@ -17,14 +17,4 @@ public class ScoreBoardEntity {
     private int runsScored;
     private int wicketsTaken;
     private int ballsPlayed;
-
-    public ScoreBoardEntity(int matchId, int runsScored, int wicketsTaken, int ballsPlayed) {
-        this.matchId = matchId;
-        this.runsScored = runsScored;
-        this.wicketsTaken = wicketsTaken;
-        this.ballsPlayed = ballsPlayed;
-    }
-
-    public ScoreBoardEntity() {
-    }
 }
