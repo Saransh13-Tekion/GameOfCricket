@@ -1,8 +1,12 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.Entity.MatchEntity;
+import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
 import com.tekion.GameOfCricket.Enums.*;
+import com.tekion.GameOfCricket.Models.Match;
 import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
+import com.tekion.GameOfCricket.Repository.ScoreBoardRepository;
 import com.tekion.GameOfCricket.Utilities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +16,16 @@ import java.sql.SQLException;
 
 @Service
 public class ScoreBoardServiceImpl implements ScoreBoardService{
+
+    @Autowired
+    private ScoreBoardRepository scoreBoardRepository;
+
+    public void saveStats(Team team, MatchEntity match){
+        for(Player player:team.getPlayers()){
+            scoreBoardRepository.save(new ScoreBoardEntity(team.getTeamID(),player.getId(),match.getId(),player.getRuns(), player.getWicketsTaken(), player.getBallsPlayed(),player.getRole()));
+        }
+    }
+
     @Override
     public void printScoreBoard(Team team){
             System.out.println(team.getName() + ":");

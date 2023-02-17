@@ -2,6 +2,8 @@ package com.tekion.GameOfCricket.Controllers;
 
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Services.MatchService;
+import com.tekion.GameOfCricket.Services.TeamService;
+import com.tekion.GameOfCricket.Services.TeamServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +16,9 @@ public class MatchController {
 
     @Autowired
     private MatchService matchService;
+
+    @Autowired
+    private TeamService teamService;
 
     @PostMapping("/start")
     public String start(@RequestBody MatchEntity matchEntity){

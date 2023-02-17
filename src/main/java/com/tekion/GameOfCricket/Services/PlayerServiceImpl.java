@@ -10,7 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.lang.Long;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,8 +22,10 @@ public class PlayerServiceImpl implements PlayerService{
     private PlayerRepository playerRepository;
 
     @Override
-    public void addPlayer(PlayerEntity player){
-        playerRepository.save(player);
+    public void addPlayer(List<PlayerEntity> players){
+        for(PlayerEntity player:players) {
+            playerRepository.save(player);
+        }
     }
 
     @Override

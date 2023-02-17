@@ -8,20 +8,14 @@ import org.springframework.stereotype.Service;
 public class PitchServiceImpl implements PitchService{
     private Player striker, nonStriker;
 
+    @Override
     public Player getStriker() {
         return striker;
     }
 
-    public void setStriker(Player striker) {
-        this.striker = striker;
-    }
-
+    @Override
     public Player getNonStriker() {
         return nonStriker;
-    }
-
-    public void setNonStriker(Player nonStriker) {
-        this.nonStriker = nonStriker;
     }
 
     @Override

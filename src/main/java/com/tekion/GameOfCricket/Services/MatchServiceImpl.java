@@ -1,6 +1,7 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.MatchEntity;
+import com.tekion.GameOfCricket.Entity.TeamEntity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.MatchRepository;
@@ -14,25 +15,27 @@ public class MatchServiceImpl implements MatchService{
 
     @Autowired
     private MatchRepository matchRepository;
-    private final Match currentMatch = null;
+    @Autowired
+    private Match currentMatch;
     int tossResult = 0;
     private int target = 0;
-    private final PlayerService playerService;
-    private final PitchServiceImpl pitch;
-
-    private final ScoreBoardService scoreBoardService ;
-    public MatchServiceImpl(PlayerService playerService,PitchServiceImpl pitch, ScoreBoardService scoreBoardService){
-        this.playerService = playerService;
-      //  this.currentMatch = currentMatch;
-        this.scoreBoardService = scoreBoardService;
-        this.pitch = pitch;
-      //  currentMatch.setTotalOvers(20);
-    }
+    @Autowired
+    private PlayerService playerService;
+    @Autowired
+    private PitchService pitch;
+    @Autowired
+    private ScoreBoardService scoreBoardService ;
+    @Autowired
+    private TeamService teamService;
     @Override
     public void startMatch(MatchEntity matchEntity){
         tossResult = toss(); // Running toss method
         matchRepository.save(matchEntity);
-        /*if(tossResult == 0) { // Playing match according to the output of toss
+        TeamEntity firstTeam = this.teamService.getTeam(matchEntity.getFirstTeamID());
+        TeamEntity secondTeam = this.teamService.getTeam(matchEntity.getSecondTeamID());
+        currentMatch.setFirstTeam(firstTeam);
+        currentMatch.setSecondTeam(secondTeam);
+        if(tossResult == 0) { // Playing match according to the output of toss
             play(currentMatch.getFirstTeam(),true,currentMatch.getSecondTeam());
             play(currentMatch.getSecondTeam(),false,currentMatch.getFirstTeam());
         }
@@ -40,8 +43,9 @@ public class MatchServiceImpl implements MatchService{
             play(currentMatch.getSecondTeam(),true,currentMatch.getFirstTeam());
             play(currentMatch.getFirstTeam(),false,currentMatch.getSecondTeam());
         }
-        scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
-        scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());*/
+       // scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
+       // scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
+
     }
 
     // Method for paying innings, taking battingTeam and current innings argument
@@ -64,7 +68,7 @@ public class MatchServiceImpl implements MatchService{
         int currentOver = 0;
         int currentBall = 0;
         for(; currentOver < currentMatch.getTotalOvers(); currentOver++){
-            if(battingTeam.isAllOut() == true)
+            if(battingTeam.isAllOut())
                 break;
             currentBowler = changeBowler(currentBowler,allBowlers);
             for(currentBall = 0; currentBall < Constants.ballsInAnOver; currentBall++){
@@ -93,7 +97,7 @@ public class MatchServiceImpl implements MatchService{
                         nonStriker = pitch.getNonStriker();
                     }
                 }
-                if(isFirstInnings == false){
+                if(!isFirstInnings){
                     if(battingTeam.getTotalRuns() >= target){
                         System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + (currentBall) + " Overs.");
                         System.out.println(battingTeam.getName() + " won the match by " + (Constants.totalWickets - battingTeam.getWickets()) + " wickets.");

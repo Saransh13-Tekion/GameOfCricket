@@ -9,16 +9,19 @@ import lombok.Data;
 public class PlayerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "name")
+    @Column(name = "Name")
     private String name;
-    @Column(name = "wicketsTaken")
+    @Column(name = "Wickets Taken")
     private int wicketsTaken;
-    @Column(name = "runs")
+    @Column(name = "Runs Made")
     private int runs = 0;
-    @Column(name = "ballsPlayed")
+    @Column(name = "Balls Played")
     private int ballsPlayed = 0;
-    @Column(name = "teamID")
+    @Column(name = "TeamID")
     private int teamID;
+
+    @Column(name = "Role")
+    private String role;
 }
