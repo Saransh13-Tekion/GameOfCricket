@@ -11,6 +11,5 @@ import java.util.List;
 
 public interface TeamService{
     void addTeam(List<TeamEntity> team);
-    void makeTeam(List<Player> players, int noOfBowlers, int teamID);
     TeamEntity getTeam(Long id);
 }

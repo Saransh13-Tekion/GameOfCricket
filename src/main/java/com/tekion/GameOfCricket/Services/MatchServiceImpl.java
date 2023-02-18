@@ -50,6 +50,8 @@ public class MatchServiceImpl implements MatchService{
         }
         scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
         scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
+        scoreBoardService.saveStats(currentMatch.getFirstTeam(),matchEntity);
+        scoreBoardService.saveStats(currentMatch.getSecondTeam(),matchEntity);
     }
 
     // Method for paying innings, taking battingTeam and current innings argument

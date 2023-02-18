@@ -31,18 +31,4 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public TeamEntity getTeam(Long id){return teamRepository.findById(id) .orElse(null);};
 
-    @Override
-    public void makeTeam(List<Player> players, int noOfBowlers, int teamID){
-        Faker faker = new Faker();
-        for(int i = 0; i< Constants.totalPlayers ; i++){
-            if(i<Constants.totalPlayers - noOfBowlers) {
-         //       players.add(new Player(PlayerRole.BATSMAN,teamID));
-            }
-            else{
-         //      players.add(new Player(PlayerRole.BOWLER,teamID));
-            }
-         //   players.get(i).setName(faker.name().firstName() + " " + faker.name().lastName());
-        }
-    }
-
 }
