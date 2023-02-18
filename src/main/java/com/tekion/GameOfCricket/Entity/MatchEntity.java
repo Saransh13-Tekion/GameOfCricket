@@ -12,6 +12,6 @@ public class MatchEntity {
     private Long id;
     private Long firstTeamID;
     private Long secondTeamID;
-    private String winner;
+    private Long winner;
     private int numberOfOvers;
 }

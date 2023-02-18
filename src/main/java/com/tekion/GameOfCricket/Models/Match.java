@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class Match {
     private Team firstTeam, secondTeam;
     private int totalOvers;
-    private String winner;
+    private Long winner;
 
     public void setFirstTeam(TeamEntity team) {
         this.firstTeam = new Team(team);

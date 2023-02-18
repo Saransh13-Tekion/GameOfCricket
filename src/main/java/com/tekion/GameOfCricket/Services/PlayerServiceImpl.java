@@ -30,14 +30,14 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Override
     public int getRuns(Player player){
+        int[] runs;
         if(player.getRole() == PlayerRole.BATSMAN){
-            int[] runs = {0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,4,4,4,4,4,6,6,6,7,7};
-            return runs[(int)(Math.random()*runs.length)];
+            runs = new int[]{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 6, 6, 6, 7, 7};
         }
         else{
-            int[] runs = {0,0,0,0,0,0,0,0,1,1,1,2,2,3,4,6,7,7,7,7};
-            return runs[(int)(Math.random()*runs.length)];
+            runs = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3, 4, 6, 7, 7, 7, 7};
         }
+        return runs[(int)(Math.random()*runs.length)];
     }
 
     public void setPlayers(Team firstTeam,Team secondTeam){
@@ -51,4 +51,18 @@ public class PlayerServiceImpl implements PlayerService{
             }
         }
     }
+
+    public void saveStats(Team team){
+        for(Player player:team.getPlayers()){
+            PlayerEntity playerEntity = playerRepository.findById(player.getId()).orElse(null);
+            if(playerEntity != null){
+                playerEntity.setRuns(playerEntity.getRuns()+ player.getRuns());
+                playerEntity.setBallsPlayed(playerEntity.getBallsPlayed() + player.getBallsPlayed());
+                playerEntity.setWicketsTaken(playerEntity.getWicketsTaken()+player.getWicketsTaken());
+                playerRepository.save(playerEntity);
+            }
+
+        }
+    }
+
 }

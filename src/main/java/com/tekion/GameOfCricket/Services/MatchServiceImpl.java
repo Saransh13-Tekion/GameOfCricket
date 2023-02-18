@@ -48,10 +48,19 @@ public class MatchServiceImpl implements MatchService{
             play(currentMatch.getSecondTeam(),true,currentMatch.getFirstTeam());
             play(currentMatch.getFirstTeam(),false,currentMatch.getSecondTeam());
         }
+        endMatch(matchEntity);
+    }
+
+    private void endMatch(MatchEntity matchEntity){
         scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
         scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
         scoreBoardService.saveStats(currentMatch.getFirstTeam(),matchEntity);
         scoreBoardService.saveStats(currentMatch.getSecondTeam(),matchEntity);
+        matchEntity.setWinner(currentMatch.getWinner());
+        matchRepository.save(matchEntity);
+        playerService.saveStats(currentMatch.getFirstTeam());
+        playerService.saveStats(currentMatch.getSecondTeam());
+        teamService.saveStats(matchEntity);
     }
 
     // Method for paying innings, taking battingTeam and current innings argument
@@ -109,7 +118,7 @@ public class MatchServiceImpl implements MatchService{
                     if(battingTeam.getTotalRuns() >= target){
                         System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + (currentBall) + " Overs.");
                         System.out.println(battingTeam.getName() + " won the match by " + (Constants.totalWickets - battingTeam.getWickets()) + " wickets.");
-                        currentMatch.setWinner(battingTeam.getName());
+                        currentMatch.setWinner(battingTeam.getTeamID());
                         return;
                     }
                 }
@@ -127,7 +136,7 @@ public class MatchServiceImpl implements MatchService{
         }
         else{
             System.out.println(bowlingTeam.getName() + " won the match by " + (target - battingTeam.getTotalRuns()) + " runs.");
-            currentMatch.setWinner(bowlingTeam.getName());
+            currentMatch.setWinner(bowlingTeam.getTeamID());
         }
     }
 
