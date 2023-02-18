@@ -15,14 +15,22 @@ public class Player {
     private boolean gotOut;
     private int runs = 0;
     private int ballsPlayed = 0;
-    private int teamID;
+    private Long teamID;
     private PlayerRole role;
-    Player wicketTakenBy;
-    List<Player> TakenWickets = new ArrayList<>();
 
-    public Player(PlayerRole role,int teamID){
+    public Player(Long role,Long teamID,String name,Long id){
         this.teamID = teamID;
-        this.role = role;
+        if(role == 0) {
+            this.role = PlayerRole.BOWLER;
+        }
+        else {
+            this.role = PlayerRole.BATSMAN;
+        }
+        this.name = name;
+        wicketsTaken = 0;
+        gotOut = false;
+        ballsPlayed = 0;
+        this.id = id;
     }
     public Player(){
 

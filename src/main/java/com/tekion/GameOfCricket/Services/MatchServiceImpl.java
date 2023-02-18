@@ -1,6 +1,7 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.MatchEntity;
+import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Entity.TeamEntity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.*;
@@ -35,6 +36,10 @@ public class MatchServiceImpl implements MatchService{
         TeamEntity secondTeam = this.teamService.getTeam(matchEntity.getSecondTeamID());
         currentMatch.setFirstTeam(firstTeam);
         currentMatch.setSecondTeam(secondTeam);
+        currentMatch.getFirstTeam().setPlayers(new ArrayList<>());
+        currentMatch.getSecondTeam().setPlayers(new ArrayList<>());
+        playerService.setPlayers(currentMatch.getFirstTeam(),currentMatch.getSecondTeam());
+        currentMatch.setTotalOvers(matchEntity.getNumberOfOvers());
         if(tossResult == 0) { // Playing match according to the output of toss
             play(currentMatch.getFirstTeam(),true,currentMatch.getSecondTeam());
             play(currentMatch.getSecondTeam(),false,currentMatch.getFirstTeam());
@@ -43,9 +48,8 @@ public class MatchServiceImpl implements MatchService{
             play(currentMatch.getSecondTeam(),true,currentMatch.getFirstTeam());
             play(currentMatch.getFirstTeam(),false,currentMatch.getSecondTeam());
         }
-       // scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
-       // scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
-
+        scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
+        scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
     }
 
     // Method for paying innings, taking battingTeam and current innings argument
@@ -53,6 +57,8 @@ public class MatchServiceImpl implements MatchService{
     //This function will take both batting and bowling team.
     @Override
     public void play(Team battingTeam, boolean isFirstInnings,Team bowlingTeam){
+        int totalWickets = battingTeam.getPlayers().size() - 1;
+        System.out.println(totalWickets);
         ArrayList<Player>allBowlers = new ArrayList<>();
         for(Player player : bowlingTeam.getPlayers()){
             if(player.getRole() == PlayerRole.BOWLER){
@@ -72,7 +78,7 @@ public class MatchServiceImpl implements MatchService{
                 break;
             currentBowler = changeBowler(currentBowler,allBowlers);
             for(currentBall = 0; currentBall < Constants.ballsInAnOver; currentBall++){
-                if(battingTeam.getWickets() == Constants.totalWickets) {
+                if(battingTeam.getWickets() == totalWickets) {
                     battingTeam.setAllOut(true);
                     break;
                 }
@@ -82,7 +88,7 @@ public class MatchServiceImpl implements MatchService{
                     battingTeam.setWickets(battingTeam.getWickets() + 1);
                     striker.setGotOut(true);
                     currentBowler.setWicketsTaken(currentBowler.getWicketsTaken()+1);
-                    if(index <= Constants.totalWickets) {
+                    if(index <= totalWickets) {
                         pitch.nextPlayer(battingTeam.getPlayers().get(index));
                         striker = pitch.getStriker();
                         index++;

@@ -1,5 +1,6 @@
 package com.tekion.GameOfCricket.Entity;
 
+import com.tekion.GameOfCricket.Enums.PlayerRole;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,8 +21,8 @@ public class PlayerEntity {
     @Column(name = "Balls Played")
     private int ballsPlayed = 0;
     @Column(name = "TeamID")
-    private int teamID;
+    private Long teamID;
 
     @Column(name = "Role")
-    private String role;
+    private Long role;
 }

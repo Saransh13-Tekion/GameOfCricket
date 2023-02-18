@@ -22,8 +22,10 @@ public class TeamServiceImpl implements TeamService{
     private TeamRepository teamRepository;
 
     @Override
-    public void addTeam(TeamEntity team){
-        teamRepository.save(team);
+    public void addTeam(List<TeamEntity> teams){
+        for(TeamEntity team : teams) {
+            teamRepository.save(team);
+        }
     }
 
     @Override
@@ -34,12 +36,13 @@ public class TeamServiceImpl implements TeamService{
         Faker faker = new Faker();
         for(int i = 0; i< Constants.totalPlayers ; i++){
             if(i<Constants.totalPlayers - noOfBowlers) {
-                players.add(new Player(PlayerRole.BATSMAN,teamID));
+         //       players.add(new Player(PlayerRole.BATSMAN,teamID));
             }
             else{
-                players.add(new Player(PlayerRole.BOWLER,teamID));
+         //      players.add(new Player(PlayerRole.BOWLER,teamID));
             }
-            players.get(i).setName(faker.name().firstName() + " " + faker.name().lastName());
+         //   players.get(i).setName(faker.name().firstName() + " " + faker.name().lastName());
         }
     }
+
 }

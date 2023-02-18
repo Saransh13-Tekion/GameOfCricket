@@ -6,6 +6,8 @@ import com.tekion.GameOfCricket.Services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/teams")
 public class TeamController {
@@ -14,8 +16,8 @@ public class TeamController {
     private TeamService teamService;
 
     @PostMapping("/add")
-    public String addTeam(@RequestBody TeamEntity team){
-        teamService.addTeam(team);
+    public String addTeam(@RequestBody List<TeamEntity> teams){
+        teamService.addTeam(teams);
         return "Team Added";
     }
     @PostMapping("/get")

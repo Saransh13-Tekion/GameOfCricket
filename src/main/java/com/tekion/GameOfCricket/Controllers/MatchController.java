@@ -1,6 +1,7 @@
 package com.tekion.GameOfCricket.Controllers;
 
 import com.tekion.GameOfCricket.Entity.MatchEntity;
+import com.tekion.GameOfCricket.Models.Match;
 import com.tekion.GameOfCricket.Services.MatchService;
 import com.tekion.GameOfCricket.Services.TeamService;
 import com.tekion.GameOfCricket.Services.TeamServiceImpl;

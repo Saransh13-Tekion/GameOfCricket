@@ -2,13 +2,14 @@ package com.tekion.GameOfCricket.Models;
 
 import com.tekion.GameOfCricket.Entity.TeamEntity;
 import lombok.Data;
-
+import org.springframework.stereotype.Component;
 
 
 @Data
+@Component
 public class Match {
     private Team firstTeam, secondTeam;
-    private int totalOvers = 0;
+    private int totalOvers;
     private String winner;
 
     public void setFirstTeam(TeamEntity team) {
