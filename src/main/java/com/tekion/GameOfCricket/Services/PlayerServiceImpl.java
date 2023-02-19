@@ -40,18 +40,35 @@ public class PlayerServiceImpl implements PlayerService{
         return runs[(int)(Math.random()*runs.length)];
     }
 
+    @Override
     public void setPlayers(Team firstTeam,Team secondTeam){
-        List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
-        for(PlayerEntity player:players){
-            if(player.getTeamID() == firstTeam.getTeamID()) {
-                firstTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(),player.getName(),player.getId()));
+        if(firstTeam.getPlayers().size() == 0) {
+            List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
+            for (PlayerEntity player : players) {
+                if (player.getTeamID() == firstTeam.getTeamID()) {
+                    firstTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
+                } else {
+                    secondTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
+                }
             }
-            else{
-                secondTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(),player.getName(),player.getId()));
-            }
+        }
+        else{
+            resetPlayers(firstTeam);
+            resetPlayers(secondTeam);
         }
     }
 
+    @Override
+    public void resetPlayers(Team team){
+        for(Player player:team.getPlayers()){
+            player.setRuns(0);
+            player.setGotOut(false);
+            player.setWicketsTaken(0);
+            player.setBallsPlayed(0);
+        }
+    }
+
+    @Override
     public void saveStats(Team team){
         for(Player player:team.getPlayers()){
             PlayerEntity playerEntity = playerRepository.findById(player.getId()).orElse(null);

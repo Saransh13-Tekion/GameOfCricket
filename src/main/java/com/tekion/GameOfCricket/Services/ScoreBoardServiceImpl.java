@@ -3,16 +3,16 @@ package com.tekion.GameOfCricket.Services;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
 import com.tekion.GameOfCricket.Enums.*;
-import com.tekion.GameOfCricket.Models.Match;
 import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Repository.ScoreBoardRepository;
 import com.tekion.GameOfCricket.Utilities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.tekion.GameOfCricket.Services.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ScoreBoardServiceImpl implements ScoreBoardService{
@@ -20,10 +20,22 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
     @Autowired
     private ScoreBoardRepository scoreBoardRepository;
 
+    @Override
     public void saveStats(Team team, MatchEntity match){
         for(Player player:team.getPlayers()){
             scoreBoardRepository.save(new ScoreBoardEntity(team.getTeamID(),match.getId(),player.getId(),player.getRuns(), player.getWicketsTaken(), player.getBallsPlayed(),player.getRole()));
         }
+    }
+
+    @Override
+    public ScoreBoardEntity getRecord(ScoreBoardEntity requiredRecord){
+        ArrayList<ScoreBoardEntity> records = (ArrayList<ScoreBoardEntity>) scoreBoardRepository.findAll();
+        for(ScoreBoardEntity record : records){
+            if(record.getPlayerId() == requiredRecord.getPlayerId() && record.getMatchId()==requiredRecord.getMatchId()){
+                return record;
+            }
+        }
+        return null;
     }
 
     @Override

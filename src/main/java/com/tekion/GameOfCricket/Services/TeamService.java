@@ -5,6 +5,7 @@ import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.TeamEntity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.Player;
+import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Utilities.Constants;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ import java.util.List;
 
 public interface TeamService{
     void addTeam(List<TeamEntity> team);
+
+    void resetTeam(Team firstTeam, Team secondTeam);
+
     TeamEntity getTeam(Long id);
     void saveStats(MatchEntity matchEntity);
 }

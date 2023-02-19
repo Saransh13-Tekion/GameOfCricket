@@ -12,4 +12,5 @@ public interface PlayerService {
     PlayerEntity getPlayer(Long id);
     void setPlayers(Team firstTeam, Team secondTeam);
     void saveStats(Team team);
+    void resetPlayers(Team team);
 }

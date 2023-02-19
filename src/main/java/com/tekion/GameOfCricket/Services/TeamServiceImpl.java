@@ -2,6 +2,7 @@ package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.TeamEntity;
+import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,20 @@ public class TeamServiceImpl implements TeamService{
         for(TeamEntity team : teams) {
             teamRepository.save(team);
         }
+    }
+
+    @Override
+    public void resetTeam(Team firstTeam,Team secondTeam){
+        firstTeam.setAllOut(false);
+        firstTeam.setWickets(0);
+        firstTeam.setBallsPlayed(0);
+        firstTeam.setTotalRuns(0);
+        firstTeam.setOversPlayed(0);
+        secondTeam.setOversPlayed(0);
+        secondTeam.setBallsPlayed(0);
+        secondTeam.setAllOut(false);
+        secondTeam.setTotalRuns(0);
+        secondTeam.setWickets(0);
     }
 
     @Override

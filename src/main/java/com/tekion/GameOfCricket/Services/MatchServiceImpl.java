@@ -1,8 +1,6 @@
 package com.tekion.GameOfCricket.Services;
 
-import com.tekion.GameOfCricket.Entity.MatchEntity;
-import com.tekion.GameOfCricket.Entity.PlayerEntity;
-import com.tekion.GameOfCricket.Entity.TeamEntity;
+import com.tekion.GameOfCricket.Entity.*;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.MatchRepository;
@@ -31,33 +29,36 @@ public class MatchServiceImpl implements MatchService{
     @Override
     public void startMatch(MatchEntity matchEntity){
         tossResult = toss(); // Running toss method
-        matchRepository.save(matchEntity);
         TeamEntity firstTeam = this.teamService.getTeam(matchEntity.getFirstTeamID());
         TeamEntity secondTeam = this.teamService.getTeam(matchEntity.getSecondTeamID());
         currentMatch.setFirstTeam(firstTeam);
         currentMatch.setSecondTeam(secondTeam);
         currentMatch.getFirstTeam().setPlayers(new ArrayList<>());
         currentMatch.getSecondTeam().setPlayers(new ArrayList<>());
-        playerService.setPlayers(currentMatch.getFirstTeam(),currentMatch.getSecondTeam());
-        currentMatch.setTotalOvers(matchEntity.getNumberOfOvers());
-        if(tossResult == 0) { // Playing match according to the output of toss
-            play(currentMatch.getFirstTeam(),true,currentMatch.getSecondTeam());
-            play(currentMatch.getSecondTeam(),false,currentMatch.getFirstTeam());
+        for(Long numberOfMatches = 1L; numberOfMatches <= matchEntity.getNumberOfMatches(); numberOfMatches++) {
+            teamService.resetTeam(currentMatch.getFirstTeam(),currentMatch.getSecondTeam());
+            matchEntity.setId(numberOfMatches);
+            playerService.setPlayers(currentMatch.getFirstTeam(), currentMatch.getSecondTeam());
+            currentMatch.setTotalOvers(matchEntity.getNumberOfOvers());
+            if (tossResult == 0) { // Playing match according to the output of toss
+                play(currentMatch.getFirstTeam(), true, currentMatch.getSecondTeam());
+                play(currentMatch.getSecondTeam(), false, currentMatch.getFirstTeam());
+            } else {
+                play(currentMatch.getSecondTeam(), true, currentMatch.getFirstTeam());
+                play(currentMatch.getFirstTeam(), false, currentMatch.getSecondTeam());
+            }
+            endMatch(matchEntity);
         }
-        else {
-            play(currentMatch.getSecondTeam(),true,currentMatch.getFirstTeam());
-            play(currentMatch.getFirstTeam(),false,currentMatch.getSecondTeam());
-        }
-        endMatch(matchEntity);
     }
 
     private void endMatch(MatchEntity matchEntity){
         scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
         scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
-        scoreBoardService.saveStats(currentMatch.getFirstTeam(),matchEntity);
-        scoreBoardService.saveStats(currentMatch.getSecondTeam(),matchEntity);
+        System.out.println("--------------------------------------------------------------------------------------------------");
         matchEntity.setWinner(currentMatch.getWinner());
         matchRepository.save(matchEntity);
+        scoreBoardService.saveStats(currentMatch.getFirstTeam(),matchEntity);
+        scoreBoardService.saveStats(currentMatch.getSecondTeam(),matchEntity);
         playerService.saveStats(currentMatch.getFirstTeam());
         playerService.saveStats(currentMatch.getSecondTeam());
         teamService.saveStats(matchEntity);

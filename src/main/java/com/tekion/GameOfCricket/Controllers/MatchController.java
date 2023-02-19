@@ -21,7 +21,7 @@ public class MatchController {
     @Autowired
     private TeamService teamService;
 
-    @PostMapping("/start")
+    @PostMapping("/startMatch")
     public String start(@RequestBody MatchEntity matchEntity){
         matchService.startMatch(matchEntity);
         return "Match Completed";
