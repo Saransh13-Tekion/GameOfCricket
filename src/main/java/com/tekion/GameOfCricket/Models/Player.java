@@ -1,11 +1,7 @@
 package com.tekion.GameOfCricket.Models;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
-import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class Player {

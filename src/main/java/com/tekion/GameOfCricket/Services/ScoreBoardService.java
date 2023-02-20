@@ -3,7 +3,6 @@ package com.tekion.GameOfCricket.Services;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
 import com.tekion.GameOfCricket.Models.Team;
-import org.springframework.stereotype.Service;
 
 
 public interface ScoreBoardService {

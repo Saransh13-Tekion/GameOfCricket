@@ -1,7 +1,6 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Models.Player;
-import lombok.Data;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,6 +1,5 @@
 package com.tekion.GameOfCricket.Entity;
 
-import com.tekion.GameOfCricket.Enums.PlayerRole;
 import jakarta.persistence.*;
 import lombok.Data;
 

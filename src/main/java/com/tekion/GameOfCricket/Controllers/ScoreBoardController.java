@@ -12,7 +12,7 @@ public class ScoreBoardController {
     @Autowired
     private ScoreBoardService scoreBoardService;
 
-    @GetMapping("/getRecord")
+    @GetMapping("/")
     public ScoreBoardEntity getRecord(@RequestBody ScoreBoardEntity scoreBoardEntity){
         return scoreBoardService.getRecord(scoreBoardEntity);
     }

@@ -15,12 +15,12 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public String addTeam(@RequestBody List<TeamEntity> teams){
         teamService.addTeam(teams);
         return "Team Added";
     }
-    @GetMapping("/get")
+    @GetMapping("/")
     public TeamEntity getTeam(@RequestBody TeamEntity team){
         return teamService.getTeam(team.getTeamID());
     }

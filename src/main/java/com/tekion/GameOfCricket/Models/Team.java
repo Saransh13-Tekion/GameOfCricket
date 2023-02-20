@@ -1,15 +1,8 @@
 package com.tekion.GameOfCricket.Models;
 
 import com.tekion.GameOfCricket.Entity.TeamEntity;
-import com.tekion.GameOfCricket.Repository.PlayerRepository;
-import com.tekion.GameOfCricket.Services.TeamServiceImpl;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
