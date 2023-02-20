@@ -20,8 +20,8 @@ public class PlayerController {
         return "Players Added.";
     }
 
-    @GetMapping("/")
-    public PlayerEntity get(@RequestBody PlayerEntity player){
-        return playerService.getPlayer(player.getId());
+    @GetMapping("/{id}")
+    public PlayerEntity get(@PathVariable Long id){
+        return playerService.getPlayer(id);
     }
 }

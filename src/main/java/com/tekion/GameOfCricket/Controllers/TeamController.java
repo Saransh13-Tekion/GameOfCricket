@@ -20,8 +20,8 @@ public class TeamController {
         teamService.addTeam(teams);
         return "Team Added";
     }
-    @GetMapping("/")
-    public TeamEntity getTeam(@RequestBody TeamEntity team){
-        return teamService.getTeam(team.getTeamID());
+    @GetMapping("/{id}")
+    public TeamEntity getTeam(@PathVariable Long id){
+        return teamService.getTeam(id);
     }
 }

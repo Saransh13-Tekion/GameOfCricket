@@ -160,7 +160,7 @@ public class MatchServiceImpl implements MatchService{
     }
 
     @Override
-    public MatchEntity getDetails(MatchEntity matchEntity){
-        return matchRepository.findById(matchEntity.getId()).orElse(null);
+    public MatchEntity getDetails(Long id){
+        return matchRepository.findById(id).orElse(null);
     }
 }

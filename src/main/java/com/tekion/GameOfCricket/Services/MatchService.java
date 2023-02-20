@@ -11,5 +11,5 @@ public interface MatchService {
     int toss();
     Player changeBowler(Player currentBowler, ArrayList<Player> allBowlers);
     void play(Team battingTeam,boolean isFirstInnings, Team bowlingTeam);
-    MatchEntity getDetails(MatchEntity matchEntity);
+    MatchEntity getDetails(Long id);
 }

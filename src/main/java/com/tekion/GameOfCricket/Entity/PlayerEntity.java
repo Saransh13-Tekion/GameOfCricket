@@ -23,5 +23,5 @@ public class PlayerEntity {
     private Long teamID;
 
     @Column(name = "Role")
-    private Long role;
+    private String role;
 }

@@ -14,10 +14,11 @@ public class Player {
     private Long teamID;
     private PlayerRole role;
 
-    public Player(Long role,Long teamID,String name,Long id){
+    public Player(String role,Long teamID,String name,Long id){
         this.teamID = teamID;
-        if(role == 0) {
+        if(role.equals("Bowler")) {
             this.role = PlayerRole.BOWLER;
+            System.out.println("Hi");
         }
         else {
             this.role = PlayerRole.BATSMAN;

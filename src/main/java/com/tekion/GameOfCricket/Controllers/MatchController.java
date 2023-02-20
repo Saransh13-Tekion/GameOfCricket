@@ -22,9 +22,9 @@ public class MatchController {
         return "Match Completed";
     }
 
-    @GetMapping("/")
-    public MatchEntity getDetails(@RequestBody MatchEntity matchEntity){
-        return matchService.getDetails(matchEntity);
+    @GetMapping("/{id}")
+    public MatchEntity getDetails(@PathVariable Long id){
+        return matchService.getDetails(id);
     }
 
 }
