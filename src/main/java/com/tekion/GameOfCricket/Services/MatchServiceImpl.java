@@ -28,7 +28,6 @@ public class MatchServiceImpl implements MatchService{
     private TeamService teamService;
     @Override
     public void startMatch(MatchEntity matchEntity){
-        tossResult = toss(); // Running toss method
         TeamEntity firstTeam = this.teamService.getTeam(matchEntity.getFirstTeamID());
         TeamEntity secondTeam = this.teamService.getTeam(matchEntity.getSecondTeamID());
         currentMatch.setFirstTeam(firstTeam);
@@ -36,6 +35,8 @@ public class MatchServiceImpl implements MatchService{
         currentMatch.getFirstTeam().setPlayers(new ArrayList<>());
         currentMatch.getSecondTeam().setPlayers(new ArrayList<>());
         for(Long numberOfMatches = 1L; numberOfMatches <= matchEntity.getNumberOfMatches(); numberOfMatches++) {
+            target = 0;
+            tossResult = toss(); // Running toss method
             teamService.resetTeam(currentMatch.getFirstTeam(),currentMatch.getSecondTeam());
             matchEntity.setId(numberOfMatches);
             playerService.setPlayers(currentMatch.getFirstTeam(), currentMatch.getSecondTeam());
@@ -156,5 +157,10 @@ public class MatchServiceImpl implements MatchService{
     @Override
     public int toss() {
         return (int) (Math.random() * 2);
+    }
+
+    @Override
+    public MatchEntity getDetails(MatchEntity matchEntity){
+        return matchRepository.findById(matchEntity.getId()).orElse(null);
     }
 }

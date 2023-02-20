@@ -20,7 +20,7 @@ public class PlayerController {
         return "Players Added.";
     }
 
-    @PostMapping("/getPlayer")
+    @GetMapping("/getPlayer")
     public PlayerEntity get(@RequestBody PlayerEntity player){
         return playerService.getPlayer(player.getId());
     }

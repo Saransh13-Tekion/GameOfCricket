@@ -19,6 +19,7 @@ public class ScoreBoardEntity {
     private Long teamId;
     @Column(name = "Match ID")
     private Long matchId;
+    @Column(name = "Player ID")
     private Long playerId;
     @Column(name = "Runs Scored")
     private int runsScored;

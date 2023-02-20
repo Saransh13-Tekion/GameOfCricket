@@ -20,7 +20,7 @@ public class TeamController {
         teamService.addTeam(teams);
         return "Team Added";
     }
-    @PostMapping("/get")
+    @GetMapping("/get")
     public TeamEntity getTeam(@RequestBody TeamEntity team){
         return teamService.getTeam(team.getTeamID());
     }
