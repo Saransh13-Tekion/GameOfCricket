@@ -26,10 +26,10 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
     }
 
     @Override
-    public ScoreBoardEntity getRecord(ScoreBoardEntity requiredRecord){
+    public ScoreBoardEntity getRecord(Long matchId,Long playerId){
         ArrayList<ScoreBoardEntity> records = (ArrayList<ScoreBoardEntity>) scoreBoardRepository.findAll();
         for(ScoreBoardEntity record : records){
-            if(record.getPlayerId() == requiredRecord.getPlayerId() && record.getMatchId()==requiredRecord.getMatchId()){
+            if(record.getPlayerId() == playerId && record.getMatchId()== matchId){
                 return record;
             }
         }

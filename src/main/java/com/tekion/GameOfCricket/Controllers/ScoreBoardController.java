@@ -12,8 +12,8 @@ public class ScoreBoardController {
     @Autowired
     private ScoreBoardService scoreBoardService;
 
-    @GetMapping("/")
-    public ScoreBoardEntity getRecord(@RequestBody ScoreBoardEntity scoreBoardEntity){
-        return scoreBoardService.getRecord(scoreBoardEntity);
+    @GetMapping("/{matchId}/{playerId}")
+    public ScoreBoardEntity getRecord(@PathVariable Long matchId, @PathVariable Long playerId){
+        return scoreBoardService.getRecord(matchId,playerId);
     }
 }
