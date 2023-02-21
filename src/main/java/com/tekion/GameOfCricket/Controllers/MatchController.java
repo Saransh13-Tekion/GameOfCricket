@@ -16,15 +16,22 @@ public class MatchController {
     @Autowired
     private TeamService teamService;
 
-    @PostMapping("/")
-    public String start(@RequestBody MatchEntity matchEntity){
-        matchService.startMatch(matchEntity);
+    @PostMapping("/start/{matchId}")
+    public String start(@PathVariable Long matchId){
+        matchService.startMatch(matchId);
         return "Match Completed";
+    }
+
+    @PostMapping("/create")
+    public String createMatch(@RequestBody MatchEntity matchEntity){
+        matchService.createMatch(matchEntity);
+        return "Match Created";
     }
 
     @GetMapping("/{id}")
     public MatchEntity getDetails(@PathVariable Long id){
         return matchService.getDetails(id);
     }
+
 
 }

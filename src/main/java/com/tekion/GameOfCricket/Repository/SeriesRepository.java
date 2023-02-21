@@ -1,9 +1,9 @@
 package com.tekion.GameOfCricket.Repository;
 
-import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
+import com.tekion.GameOfCricket.Entity.SeriesEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ScoreBoardRepository extends CrudRepository<ScoreBoardEntity,Long> {
+public interface SeriesRepository extends CrudRepository<SeriesEntity,Long> {
 }
