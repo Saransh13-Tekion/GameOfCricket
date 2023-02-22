@@ -18,7 +18,7 @@ public class PitchServiceImpl implements PitchService{
     }
 
     @Override
-    public void openers(Player striker, Player nonStriker){
+    public void setOpeners(Player striker, Player nonStriker){
         this.striker = striker;
         this.nonStriker = nonStriker;
     }
@@ -31,7 +31,7 @@ public class PitchServiceImpl implements PitchService{
     }
 
     @Override
-    public void nextPlayer(Player player){
+    public void setStriker(Player player){
         this.striker = player;
     }
 }

@@ -4,9 +4,9 @@ import com.tekion.GameOfCricket.Models.Player;
 
 
 public interface PitchService {
-    void openers(Player striker, Player nonStriker);
+    void setOpeners(Player striker, Player nonStriker);
     void swap();
-    void nextPlayer(Player player);
+    void setStriker(Player player);
     Player getNonStriker();
     Player getStriker();
 }

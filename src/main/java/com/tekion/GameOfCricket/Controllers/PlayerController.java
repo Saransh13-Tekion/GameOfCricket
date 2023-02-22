@@ -17,6 +17,7 @@ public class PlayerController {
     @PostMapping("/")
     public String add(@RequestBody List<PlayerEntity>players){
         playerService.addPlayer(players);
+
         return "Players Added.";
     }
 

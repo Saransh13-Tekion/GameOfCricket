@@ -1,9 +1,12 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
+import com.tekion.GameOfCricket.Enums.RunGenerationStrategy;
 import com.tekion.GameOfCricket.Models.Match;
 import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
+import com.tekion.GameOfCricket.Services.runGenerator.GetRuns;
+import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
 import com.tekion.GameOfCricket.Utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,31 +17,15 @@ import java.util.Collections;
 @Service
 public class InningServiceImpl implements InningService{
     @Autowired
-    private PitchService pitch;
+    private PitchService pitchService;
     @Autowired
     private PlayerService playerService;
-    @Autowired
-    private Match currentMatch;
+  // private Match currentMatch;
     private int target = 0;
 
-    public PitchService getPitch() {
-        return pitch;
-    }
-
-    public Match getCurrentMatch() {
-        return currentMatch;
-    }
-
-    public void setCurrentMatch(Match currentMatch) {
-        this.currentMatch = currentMatch;
-    }
-
-    public int getTarget() {
-        return target;
-    }
-
     @Override
-    public void play(Team battingTeam, boolean isFirstInnings, Team bowlingTeam){
+    public void play(Match currentMatch,Team battingTeam, boolean isFirstInnings, Team bowlingTeam){
+
         int totalWickets = battingTeam.getPlayers().size() - 1;
         System.out.println(totalWickets);
         ArrayList<Player> allBowlers = new ArrayList<>();
@@ -47,14 +34,15 @@ public class InningServiceImpl implements InningService{
                 allBowlers.add(player);
             }
         }
-        pitch.openers(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
-        Player striker = pitch.getStriker();
-        Player nonStriker = pitch.getNonStriker();
+        pitchService.setOpeners(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
+        Player striker = pitchService.getStriker();
+        Player nonStriker = pitchService.getNonStriker();
         Player currentBowler = allBowlers.get(0);
         Collections.shuffle(allBowlers);
         int index = 2;
         int currentOver = 0;
         int currentBall = 0;
+        GetRuns getRuns = RunGeneratorFactory.runGenerator();
         for(; currentOver < currentMatch.getTotalOvers(); currentOver++){
             if(battingTeam.isAllOut())
                 break;
@@ -64,15 +52,15 @@ public class InningServiceImpl implements InningService{
                     battingTeam.setAllOut(true);
                     break;
                 }
-                int currRuns = playerService.getRuns(striker);
+                int currRuns = getRuns.generateRuns(striker.getRole());
                 striker.setBallsPlayed(striker.getBallsPlayed()+1);
                 if(currRuns == Constants.wicketBall) {
                     battingTeam.setWickets(battingTeam.getWickets() + 1);
                     striker.setGotOut(true);
                     currentBowler.setWicketsTaken(currentBowler.getWicketsTaken()+1);
                     if(index <= totalWickets) {
-                        pitch.nextPlayer(battingTeam.getPlayers().get(index));
-                        striker = pitch.getStriker();
+                        pitchService.setStriker(battingTeam.getPlayers().get(index));
+                        striker = pitchService.getStriker();
                         index++;
                     }
                 }
@@ -80,9 +68,9 @@ public class InningServiceImpl implements InningService{
                     striker.setRuns(striker.getRuns() + currRuns);
                     battingTeam.setTotalRuns(battingTeam.getTotalRuns() + currRuns);
                     if (currRuns % 2 == 1) {
-                        pitch.swap();
+                        pitchService.swap();
                         striker = nonStriker;
-                        nonStriker = pitch.getNonStriker();
+                        nonStriker = pitchService.getNonStriker();
                     }
                 }
                 if(!isFirstInnings){
@@ -94,7 +82,7 @@ public class InningServiceImpl implements InningService{
                     }
                 }
             }
-            // pitch.swap();
+            // pitchService.swap();
         }
         if(battingTeam.isAllOut()){
             System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + currentBall + " Overs.");

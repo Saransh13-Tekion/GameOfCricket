@@ -18,7 +18,6 @@ public class Player {
         this.teamID = teamID;
         if(role.equals("Bowler")) {
             this.role = PlayerRole.BOWLER;
-            System.out.println("Hi");
         }
         else {
             this.role = PlayerRole.BATSMAN;

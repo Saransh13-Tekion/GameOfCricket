@@ -24,4 +24,9 @@ public class SeriesController {
         return "Series Started.";
     }
 
+    @GetMapping("/{id}")
+    public SeriesEntity get(@PathVariable Long id){
+        return seriesService.getSeries(id);
+    }
+
 }

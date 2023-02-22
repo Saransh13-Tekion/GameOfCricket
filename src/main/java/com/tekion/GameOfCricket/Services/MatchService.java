@@ -7,4 +7,5 @@ public interface MatchService {
     int toss();
     MatchEntity getDetails(Long id);
     void createMatch(MatchEntity match);
+    void createMatchforSeries(MatchEntity match,Long seriesID);
 }

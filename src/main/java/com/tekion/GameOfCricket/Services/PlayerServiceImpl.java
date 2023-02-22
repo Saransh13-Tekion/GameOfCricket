@@ -1,14 +1,15 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
-import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Models.*;
+import com.tekion.GameOfCricket.Repository.PlayerMongoRepository;
 import com.tekion.GameOfCricket.Repository.PlayerRepository;
+import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.Long;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlayerServiceImpl implements PlayerService{
@@ -16,10 +17,14 @@ public class PlayerServiceImpl implements PlayerService{
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private PlayerMongoRepository playerMongoRepository;
+
     @Override
     public void addPlayer(List<PlayerEntity> players){
         for(PlayerEntity player:players) {
             playerRepository.save(player);
+           // playerMongoRepository.save(new PlayerDocument(1L));
         }
     }
 
@@ -28,17 +33,6 @@ public class PlayerServiceImpl implements PlayerService{
         return playerRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public int getRuns(Player player){
-        int[] runs;
-        if(player.getRole() == PlayerRole.BATSMAN){
-            runs = new int[]{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 6, 6, 6, 7, 7};
-        }
-        else{
-            runs = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3, 4, 6, 7, 7, 7, 7};
-        }
-        return runs[(int)(Math.random()*runs.length)];
-    }
 
     @Override
     public void setPlayers(Team firstTeam,Team secondTeam){

@@ -1,15 +1,16 @@
-package com.tekion.GameOfCricket.Entity;
+package com.tekion.GameOfCricket.Dcoument;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
-@Entity
-@Table(name = "Players")
-public class PlayerEntity {
+@Document(collection = "Players")
+@NoArgsConstructor
+public class PlayerDocument {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
     @Column(name = "Name")
@@ -25,4 +26,8 @@ public class PlayerEntity {
 
     @Column(name = "Role")
     private String role;
+
+    public PlayerDocument(Long id){
+        this.id = id;
+    }
 }

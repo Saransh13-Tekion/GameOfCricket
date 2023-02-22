@@ -3,6 +3,7 @@ package com.tekion.GameOfCricket.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Entity
@@ -16,6 +17,8 @@ public class MatchEntity {
     private Long secondTeamID;
     private Long winner;
     private int numberOfOvers;
+    private Long seriesID;
+    private String runStrategy;
 
     public MatchEntity(Long firstTeamID, Long secondTeamID, int numberOfOvers) {
         this.firstTeamID = firstTeamID;

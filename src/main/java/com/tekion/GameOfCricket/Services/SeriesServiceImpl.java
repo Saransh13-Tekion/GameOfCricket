@@ -20,11 +20,18 @@ public class SeriesServiceImpl implements SeriesService{
     }
 
     @Override
+    public SeriesEntity getSeries(Long id){
+        return seriesRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public void startSeries(Long id) {
         SeriesEntity seriesEntity = seriesRepository.findById(id).orElse(null);
         int firstTeamWin = 0,secondTeamWin = 0;
         for(Long matchNumber = 1L;matchNumber<=seriesEntity.getNumberOfMatches();matchNumber++) {
-            matchService.createMatch(new MatchEntity(seriesEntity.getFirstTeamID(), seriesEntity.getSecondTeamID(), seriesEntity.getNumberOfOvers()));
+            MatchEntity match = new MatchEntity(seriesEntity.getFirstTeamID(), seriesEntity.getSecondTeamID(), seriesEntity.getNumberOfOvers());
+            System.out.println(match.getId());
+            matchService.createMatchforSeries(match,id);
             Long winner = matchService.startMatch(matchNumber);
             if(seriesEntity.getFirstTeamID() == winner){
                 firstTeamWin++;
@@ -34,6 +41,8 @@ public class SeriesServiceImpl implements SeriesService{
             }
         }
         seriesEntity.setWinner(firstTeamWin>secondTeamWin? seriesEntity.getFirstTeamID() : seriesEntity.getSecondTeamID());
+        seriesEntity.setMatchesFirstTeamWon(firstTeamWin);
+        seriesEntity.setMatchesSecondTeamWon(secondTeamWin);
         seriesRepository.save(seriesEntity);
     }
 }

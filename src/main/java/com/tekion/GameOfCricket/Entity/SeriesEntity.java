@@ -3,6 +3,8 @@ package com.tekion.GameOfCricket.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Map;
+
 @Entity
 @Data
 @Table(name = "Series")
@@ -15,5 +17,7 @@ public class SeriesEntity {
     private Long winner;
     private int numberOfOvers;
     private int numberOfMatches;
+    private int matchesFirstTeamWon;
+    private int matchesSecondTeamWon;
 
 }
