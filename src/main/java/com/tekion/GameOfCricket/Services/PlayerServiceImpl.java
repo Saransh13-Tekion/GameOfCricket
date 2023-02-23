@@ -4,12 +4,10 @@ import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.PlayerMongoRepository;
 import com.tekion.GameOfCricket.Repository.PlayerRepository;
-import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.Long;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PlayerServiceImpl implements PlayerService{

@@ -3,8 +3,6 @@ package com.tekion.GameOfCricket.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Map;
-
 @Entity
 @Data
 @Table(name = "Series")

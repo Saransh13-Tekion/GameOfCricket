@@ -4,12 +4,12 @@ import com.tekion.GameOfCricket.Enums.RunGenerationStrategy;
 
 public class RunGeneratorFactory {
     public static RunGenerationStrategy runGenerationStrategy;
-    public static GetRuns runGenerator(){
+    public static RunGenerator runGenerator(){
         if(runGenerationStrategy == RunGenerationStrategy.EQUAL) {
-            return new EqualRunGeneration();
+            return new EqualRunGenerator();
         }
         else{
-            return new WeightedRunGeneration();
+            return new WeightedRunGenerator();
         }
     }
 }

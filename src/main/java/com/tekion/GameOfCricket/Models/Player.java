@@ -2,8 +2,10 @@ package com.tekion.GameOfCricket.Models;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Player {
     private Long id;
     private String name;
@@ -16,7 +18,7 @@ public class Player {
 
     public Player(String role,Long teamID,String name,Long id){
         this.teamID = teamID;
-        if(role.equals("Bowler")) {
+        if(PlayerRole.BOWLER.getPlayerRole().equalsIgnoreCase(role)) {
             this.role = PlayerRole.BOWLER;
         }
         else {
@@ -28,8 +30,4 @@ public class Player {
         ballsPlayed = 0;
         this.id = id;
     }
-    public Player(){
-
-    }
-
 }

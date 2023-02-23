@@ -4,7 +4,6 @@ import com.tekion.GameOfCricket.Entity.*;
 import com.tekion.GameOfCricket.Enums.RunGenerationStrategy;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.MatchRepository;
-import com.tekion.GameOfCricket.Services.runGenerator.GetRuns;
 import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

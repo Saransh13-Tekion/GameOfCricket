@@ -2,9 +2,7 @@ package com.tekion.GameOfCricket.Services.runGenerator;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 
-import java.util.Optional;
-
-public class WeightedRunGeneration implements GetRuns{
+public class WeightedRunGenerator implements RunGenerator {
 
     @Override
     public int generateRuns(PlayerRole playerRole) {

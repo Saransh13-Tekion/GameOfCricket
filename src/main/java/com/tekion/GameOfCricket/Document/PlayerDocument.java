@@ -1,8 +1,6 @@
-package com.tekion.GameOfCricket.Dcoument;
+package com.tekion.GameOfCricket.Document;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;

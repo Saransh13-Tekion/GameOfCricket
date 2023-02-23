@@ -29,7 +29,7 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
     public ScoreBoardEntity getRecord(Long matchId,Long playerId){
         ArrayList<ScoreBoardEntity> records = (ArrayList<ScoreBoardEntity>) scoreBoardRepository.findAll();
         for(ScoreBoardEntity record : records){
-            if(record.getPlayerId() == playerId && record.getMatchId()== matchId){
+            if(record.getPlayerId().equals(playerId) && record.getMatchId().equals(matchId)){
                 return record;
             }
         }
@@ -41,7 +41,7 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
             System.out.println(team.getName() + ":");
             System.out.println("Total Runs Scored: " + team.getTotalRuns());
             System.out.println("Batsman\t\t\t\t\t\tRuns\tBalls");
-            int playerNotBatted = Constants.totalPlayers;
+            int playerNotBatted = Constants.TOTAL_PLAYERS;
             for(Player player:team.getPlayers()){
                 if(player.getBallsPlayed() != 0) {
                     int bufferSize = 20 - player.getName().length();
