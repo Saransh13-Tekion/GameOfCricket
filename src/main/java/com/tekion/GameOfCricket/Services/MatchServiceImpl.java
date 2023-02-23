@@ -88,12 +88,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public void createMatch(MatchEntity match) {
-        matchRepository.save(match);
-    }
-    @Override
-    public void createMatchforSeries(MatchEntity match,Long seriesID){
-        match.setSeriesID(seriesID);
-        matchRepository.save(match);
+    public Long createMatch(MatchEntity match) {
+        return matchRepository.save(match).getId();
     }
 }

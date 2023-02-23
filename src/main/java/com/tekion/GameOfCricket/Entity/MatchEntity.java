@@ -24,4 +24,10 @@ public class MatchEntity {
         this.secondTeamID = secondTeamID;
         this.numberOfOvers = numberOfOvers;
     }
+    public MatchEntity(Long firstTeamID, Long secondTeamID, int numberOfOvers,Long seriesID) {
+        this.firstTeamID = firstTeamID;
+        this.secondTeamID = secondTeamID;
+        this.numberOfOvers = numberOfOvers;
+        this.seriesID = seriesID;
+    }
 }
