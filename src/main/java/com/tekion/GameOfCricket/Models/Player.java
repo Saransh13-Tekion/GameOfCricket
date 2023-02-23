@@ -1,13 +1,11 @@
 package com.tekion.GameOfCricket.Models;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
-import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Player {
     private Long id;
     private String name;
@@ -15,17 +13,21 @@ public class Player {
     private boolean gotOut;
     private int runs = 0;
     private int ballsPlayed = 0;
-    private int teamID;
+    private Long teamID;
     private PlayerRole role;
-    Player wicketTakenBy;
-    List<Player> TakenWickets = new ArrayList<>();
 
-    public Player(PlayerRole role,int teamID){
+    public Player(String role,Long teamID,String name,Long id){
         this.teamID = teamID;
-        this.role = role;
+        if(PlayerRole.BOWLER.getPlayerRole().equalsIgnoreCase(role)) {
+            this.role = PlayerRole.BOWLER;
+        }
+        else {
+            this.role = PlayerRole.BATSMAN;
+        }
+        this.name = name;
+        wicketsTaken = 0;
+        gotOut = false;
+        ballsPlayed = 0;
+        this.id = id;
     }
-    public Player(){
-
-    }
-
 }

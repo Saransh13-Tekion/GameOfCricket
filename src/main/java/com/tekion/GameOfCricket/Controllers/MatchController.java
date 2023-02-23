@@ -3,15 +3,11 @@ package com.tekion.GameOfCricket.Controllers;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Services.MatchService;
 import com.tekion.GameOfCricket.Services.TeamService;
-import com.tekion.GameOfCricket.Services.TeamServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/match")
+@RequestMapping("/matches")
 public class MatchController {
 
     @Autowired
@@ -20,10 +16,22 @@ public class MatchController {
     @Autowired
     private TeamService teamService;
 
-    @PostMapping("/start")
-    public String start(@RequestBody MatchEntity matchEntity){
-        matchService.startMatch(matchEntity);
+    @PostMapping("/start/{matchId}")
+    public String start(@PathVariable Long matchId){
+        matchService.startMatch(matchId);
         return "Match Completed";
     }
+
+    @PostMapping("/create")
+    public String createMatch(@RequestBody MatchEntity matchEntity){
+        matchService.createMatch(matchEntity);
+        return "Match Created";
+    }
+
+    @GetMapping("/{id}")
+    public MatchEntity getDetails(@PathVariable Long id){
+        return matchService.getDetails(id);
+    }
+
 
 }

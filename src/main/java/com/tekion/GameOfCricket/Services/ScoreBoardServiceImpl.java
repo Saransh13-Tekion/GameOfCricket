@@ -3,16 +3,14 @@ package com.tekion.GameOfCricket.Services;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
 import com.tekion.GameOfCricket.Enums.*;
-import com.tekion.GameOfCricket.Models.Match;
 import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Repository.ScoreBoardRepository;
 import com.tekion.GameOfCricket.Utilities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.tekion.GameOfCricket.Services.*;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 @Service
 public class ScoreBoardServiceImpl implements ScoreBoardService{
@@ -20,10 +18,22 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
     @Autowired
     private ScoreBoardRepository scoreBoardRepository;
 
+    @Override
     public void saveStats(Team team, MatchEntity match){
         for(Player player:team.getPlayers()){
-            scoreBoardRepository.save(new ScoreBoardEntity(team.getTeamID(),player.getId(),match.getId(),player.getRuns(), player.getWicketsTaken(), player.getBallsPlayed(),player.getRole()));
+            scoreBoardRepository.save(new ScoreBoardEntity(team.getTeamID(),match.getId(),player.getId(),player.getRuns(), player.getWicketsTaken(), player.getBallsPlayed(),player.getRole()));
         }
+    }
+
+    @Override
+    public ScoreBoardEntity getRecord(Long matchId,Long playerId){
+        ArrayList<ScoreBoardEntity> records = (ArrayList<ScoreBoardEntity>) scoreBoardRepository.findAll();
+        for(ScoreBoardEntity record : records){
+            if(record.getPlayerId().equals(playerId) && record.getMatchId().equals(matchId)){
+                return record;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -31,7 +41,7 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
             System.out.println(team.getName() + ":");
             System.out.println("Total Runs Scored: " + team.getTotalRuns());
             System.out.println("Batsman\t\t\t\t\t\tRuns\tBalls");
-            int playerNotBatted = Constants.totalPlayers;
+            int playerNotBatted = Constants.TOTAL_PLAYERS;
             for(Player player:team.getPlayers()){
                 if(player.getBallsPlayed() != 0) {
                     int bufferSize = 20 - player.getName().length();

@@ -1,16 +1,16 @@
 package com.tekion.GameOfCricket.Services;
 
-import com.github.javafaker.Faker;
+import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.TeamEntity;
-import com.tekion.GameOfCricket.Enums.PlayerRole;
-import com.tekion.GameOfCricket.Models.Player;
-import com.tekion.GameOfCricket.Utilities.Constants;
-import org.springframework.stereotype.Service;
+import com.tekion.GameOfCricket.Models.Team;
 
 import java.util.List;
 
 public interface TeamService{
-    void addTeam(TeamEntity team);
-    void makeTeam(List<Player> players, int noOfBowlers, int teamID);
+    void addTeam(List<TeamEntity> team);
+
+    void resetTeam(Team firstTeam, Team secondTeam);
+
     TeamEntity getTeam(Long id);
+    void saveStats(MatchEntity matchEntity);
 }

@@ -14,14 +14,15 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
-    @PostMapping("/addPlayer")
+    @PostMapping("/")
     public String add(@RequestBody List<PlayerEntity>players){
         playerService.addPlayer(players);
+
         return "Players Added.";
     }
 
-    @PostMapping("/getPlayer")
-    public PlayerEntity get(@RequestBody PlayerEntity player){
-        return playerService.getPlayer(player.getId());
+    @GetMapping("/{id}")
+    public PlayerEntity get(@PathVariable Long id){
+        return playerService.getPlayer(id);
     }
 }
