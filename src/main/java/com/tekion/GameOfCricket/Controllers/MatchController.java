@@ -1,5 +1,6 @@
 package com.tekion.GameOfCricket.Controllers;
 
+import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Services.MatchService;
 import com.tekion.GameOfCricket.Services.TeamService;
@@ -17,15 +18,15 @@ public class MatchController {
     private TeamService teamService;
 
     @PostMapping("/start/{matchId}")
-    public String start(@PathVariable Long matchId){
+    public ResponseDTO start(@PathVariable Long matchId){
         matchService.matchPreparation(matchId);
-        return "Match Completed";
+        return new ResponseDTO(true,"none");
     }
 
     @PostMapping("/create")
-    public String createMatch(@RequestBody MatchEntity matchEntity){
+    public ResponseDTO createMatch(@RequestBody MatchEntity matchEntity){
         matchService.createMatch(matchEntity);
-        return "Match Created";
+        return new ResponseDTO(true,"none");
     }
 
     @GetMapping("/{id}")

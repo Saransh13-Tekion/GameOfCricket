@@ -1,5 +1,6 @@
 package com.tekion.GameOfCricket.Controllers;
 
+import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,9 @@ public class PlayerController {
     private PlayerService playerService;
 
     @PostMapping("/")
-    public String add(@RequestBody List<PlayerEntity>players){
+    public ResponseDTO add(@RequestBody List<PlayerEntity>players){
         playerService.addPlayer(players);
-
-        return "Players Added.";
+        return new ResponseDTO(true,"none");
     }
 
     @GetMapping("/{id}")
