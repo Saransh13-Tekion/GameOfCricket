@@ -18,7 +18,7 @@ public class MatchController {
 
     @PostMapping("/start/{matchId}")
     public String start(@PathVariable Long matchId){
-        matchService.startMatch(matchId);
+        matchService.matchPreparation(matchId);
         return "Match Completed";
     }
 

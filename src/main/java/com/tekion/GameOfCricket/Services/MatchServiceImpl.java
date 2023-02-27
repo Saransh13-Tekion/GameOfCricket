@@ -27,20 +27,10 @@ public class MatchServiceImpl implements MatchService {
     private Match currentMatch;
 
     @Override
-    public Long startMatch(Long id) {
-        MatchEntity matchEntity = matchRepository.findById(id).orElse(null);
-        TeamEntity firstTeam = this.teamService.getTeam(matchEntity.getFirstTeamID());
-        TeamEntity secondTeam = this.teamService.getTeam(matchEntity.getSecondTeamID());
-        this.currentMatch = new Match();
-        currentMatch.setFirstTeam(firstTeam);
-        currentMatch.setSecondTeam(secondTeam);
-        currentMatch.getFirstTeam().setPlayers(new ArrayList<>());
-        currentMatch.getSecondTeam().setPlayers(new ArrayList<>());
+    public Long startMatch(MatchEntity matchEntity) {
         int tossResult = toss(); // Running toss method
-        teamService.resetTeam(currentMatch.getFirstTeam(), currentMatch.getSecondTeam());
         playerService.setPlayers(currentMatch.getFirstTeam(), currentMatch.getSecondTeam());
         currentMatch.setTotalOvers(matchEntity.getNumberOfOvers());
-        setStrategy(matchEntity);
         if (tossResult == 0) { // Playing match according to the output of toss
             inningService.play(currentMatch,currentMatch.getFirstTeam(), true, currentMatch.getSecondTeam());
             inningService.play(currentMatch,currentMatch.getSecondTeam(), false, currentMatch.getFirstTeam());
@@ -50,6 +40,20 @@ public class MatchServiceImpl implements MatchService {
         }
         endMatch(matchEntity);
         return currentMatch.getWinner();
+    }
+
+    @Override
+    public Long matchPreparation(Long matchId){
+        MatchEntity matchEntity = matchRepository.findById(matchId).orElse(null);
+        TeamEntity firstTeam = this.teamService.getTeam(matchEntity.getFirstTeamID());
+        TeamEntity secondTeam = this.teamService.getTeam(matchEntity.getSecondTeamID());
+        this.currentMatch = new Match();
+        currentMatch.setFirstTeam(firstTeam);
+        currentMatch.setSecondTeam(secondTeam);
+        currentMatch.getFirstTeam().setPlayers(new ArrayList<>());
+        currentMatch.getSecondTeam().setPlayers(new ArrayList<>());
+        setStrategy(matchEntity);
+        return startMatch(matchEntity);
     }
 
     private void setStrategy(MatchEntity matchEntity) {
@@ -71,11 +75,6 @@ public class MatchServiceImpl implements MatchService {
         playerService.saveStats(currentMatch.getSecondTeam());
         teamService.saveStats(matchEntity);
     }
-
-    // Method for paying innings, taking battingTeam and current innings argument
-    // isFirstInnings will be true for first innings and false for second innings
-    //This function will take both batting and bowling team.
-
 
     @Override
     public int toss() {

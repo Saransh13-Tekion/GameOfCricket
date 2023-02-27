@@ -31,7 +31,7 @@ public class SeriesServiceImpl implements SeriesService{
         for(Long matchNumber = 1L;matchNumber<=seriesEntity.getNumberOfMatches();matchNumber++) {
             MatchEntity match = new MatchEntity(seriesEntity.getFirstTeamID(), seriesEntity.getSecondTeamID(), seriesEntity.getNumberOfOvers(),seriesEntity.getId());
             Long matchId = matchService.createMatch(match);
-            Long winner = matchService.startMatch(matchId);
+            Long winner = matchService.matchPreparation(matchId);
             if(seriesEntity.getFirstTeamID() == winner){
                 firstTeamWin++;
             }

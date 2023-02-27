@@ -17,29 +17,25 @@ import java.util.Collections;
 public class InningServiceImpl implements InningService{
     @Autowired
     private PitchService pitchService;
-    @Autowired
-    private PlayerService playerService;
     private int target = 0;
+    private int currentOver = 0;
+    private int currentBall = 0;
+    private int totalWickets;
+    private int currentBatsmanNumber = 0;
 
+    // Method for paying innings, taking battingTeam and current innings argument
+    // isFirstInnings will be true for first innings and false for second innings
+    //This function will take both batting and bowling team.
     @Override
     public void play(Match currentMatch,Team battingTeam, boolean isFirstInnings, Team bowlingTeam){
-
-        int totalWickets = battingTeam.getPlayers().size() - 1;
-        System.out.println(totalWickets);
-        ArrayList<Player> allBowlers = new ArrayList<>();
-        for(Player player : bowlingTeam.getPlayers()){
-            if(player.getRole() == PlayerRole.BOWLER){
-                allBowlers.add(player);
-            }
-        }
-        pitchService.setOpeners(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
-        Player striker = pitchService.getStriker();
-        Player nonStriker = pitchService.getNonStriker();
-        Player currentBowler = allBowlers.get(0);
+        totalWickets = battingTeam.getPlayers().size() - 1;
+        ArrayList<Player> allBowlers = getAllBowlers(bowlingTeam);
         Collections.shuffle(allBowlers);
-        int index = 2;
-        int currentOver = 0;
-        int currentBall = 0;
+        pitchService.setOpeners(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
+        currentBatsmanNumber = 2;
+        pitchService.setCurrentBowler(allBowlers.get(0));
+        Player striker = pitchService.getStriker();
+        Player currentBowler = pitchService.getCurrentBowler();
         RunGenerator runGenerator = RunGeneratorFactory.runGenerator();
         for(; currentOver < currentMatch.getTotalOvers(); currentOver++){
             if(battingTeam.isAllOut())
@@ -51,26 +47,7 @@ public class InningServiceImpl implements InningService{
                     break;
                 }
                 int currRuns = runGenerator.generateRuns(striker.getRole());
-                striker.setBallsPlayed(striker.getBallsPlayed()+1);
-                if(currRuns == Constants.WICKET_BALL) {
-                    battingTeam.setWickets(battingTeam.getWickets() + 1);
-                    striker.setGotOut(true);
-                    currentBowler.setWicketsTaken(currentBowler.getWicketsTaken()+1);
-                    if(index <= totalWickets) {
-                        pitchService.setStriker(battingTeam.getPlayers().get(index));
-                        striker = pitchService.getStriker();
-                        index++;
-                    }
-                }
-                else {
-                    striker.setRuns(striker.getRuns() + currRuns);
-                    battingTeam.setTotalRuns(battingTeam.getTotalRuns() + currRuns);
-                    if (currRuns % 2 == 1) {
-                        pitchService.swap();
-                        striker = nonStriker;
-                        nonStriker = pitchService.getNonStriker();
-                    }
-                }
+                ballOperation(battingTeam,currRuns);
                 if(!isFirstInnings){
                     if(battingTeam.getTotalRuns() >= target){
                         System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + (currentBall) + " Overs.");
@@ -80,8 +57,47 @@ public class InningServiceImpl implements InningService{
                     }
                 }
             }
-            // pitchService.swap();
         }
+        inningAftermath(battingTeam,bowlingTeam,isFirstInnings,currentMatch);
+    }
+
+    private void ballOperation(Team battingTeam,int currRuns){
+        Player striker = pitchService.getStriker();
+        Player nonStriker = pitchService.getNonStriker();
+        Player currentBowler = pitchService.getCurrentBowler();
+        striker.setBallsPlayed(striker.getBallsPlayed()+1);
+        if(currRuns == Constants.WICKET_BALL) {
+            battingTeam.setWickets(battingTeam.getWickets() + 1);
+            striker.setGotOut(true);
+            currentBowler.setWicketsTaken(currentBowler.getWicketsTaken()+1);
+            if(currentBatsmanNumber <= totalWickets) {
+                pitchService.setStriker(battingTeam.getPlayers().get(currentBatsmanNumber));
+                striker = pitchService.getStriker();
+                currentBatsmanNumber++;
+            }
+        }
+        else {
+            striker.setRuns(striker.getRuns() + currRuns);
+            battingTeam.setTotalRuns(battingTeam.getTotalRuns() + currRuns);
+            if (currRuns % 2 == 1) {
+                pitchService.swap();
+                striker = nonStriker;
+                nonStriker = pitchService.getNonStriker();
+            }
+        }
+    }
+
+    private ArrayList<Player> getAllBowlers(Team bowlingTeam){
+        ArrayList<Player> bowlers = new ArrayList<>();
+        for(Player player : bowlingTeam.getPlayers()){
+            if(player.getRole() == PlayerRole.BOWLER){
+                bowlers.add(player);
+            }
+        }
+        return bowlers;
+    }
+
+    private void inningAftermath(Team battingTeam, Team bowlingTeam,Boolean isFirstInnings,Match currentMatch){
         if(battingTeam.isAllOut()){
             System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + currentBall + " Overs.");
         }

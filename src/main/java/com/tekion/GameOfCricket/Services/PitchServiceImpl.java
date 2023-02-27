@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PitchServiceImpl implements PitchService{
-    private Player striker, nonStriker;
+    private Player striker, nonStriker, currentBowler;
 
     @Override
     public Player getStriker() {
@@ -33,5 +33,15 @@ public class PitchServiceImpl implements PitchService{
     @Override
     public void setStriker(Player player){
         this.striker = player;
+    }
+
+    @Override
+    public Player getCurrentBowler(){
+        return currentBowler;
+    }
+
+    @Override
+    public void setCurrentBowler(Player currentBowler) {
+        this.currentBowler = currentBowler;
     }
 }
