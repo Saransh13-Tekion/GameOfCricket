@@ -24,10 +24,14 @@ public class MatchServiceImpl implements MatchService {
     @Autowired
     private TeamService teamService;
 
-    private Match currentMatch;
 
     @Override
-    public Long startMatch(MatchEntity matchEntity) {
+    public Long startMatch(Long matchId) {
+        MatchEntity matchEntity = matchRepository.findById(matchId).orElse(null);
+        Match currentMatch = new Match();
+        currentMatch.setFirstTeam(teamService.getTeam(matchEntity.getFirstTeamID()));
+        currentMatch.setSecondTeam(teamService.getTeam(matchEntity.getSecondTeamID()));
+        setStrategy(matchEntity);
         int tossResult = toss(); // Running toss method
         playerService.setPlayers(currentMatch.getFirstTeam(), currentMatch.getSecondTeam());
         currentMatch.setTotalOvers(matchEntity.getNumberOfOvers());
@@ -38,23 +42,10 @@ public class MatchServiceImpl implements MatchService {
             inningService.play(currentMatch,currentMatch.getSecondTeam(), true, currentMatch.getFirstTeam());
             inningService.play(currentMatch,currentMatch.getFirstTeam(), false, currentMatch.getSecondTeam());
         }
-        endMatch(matchEntity);
+        endMatch(matchEntity,currentMatch);
         return currentMatch.getWinner();
     }
 
-    @Override
-    public Long matchPreparation(Long matchId){
-        MatchEntity matchEntity = matchRepository.findById(matchId).orElse(null);
-        TeamEntity firstTeam = this.teamService.getTeam(matchEntity.getFirstTeamID());
-        TeamEntity secondTeam = this.teamService.getTeam(matchEntity.getSecondTeamID());
-        this.currentMatch = new Match();
-        currentMatch.setFirstTeam(firstTeam);
-        currentMatch.setSecondTeam(secondTeam);
-        currentMatch.getFirstTeam().setPlayers(new ArrayList<>());
-        currentMatch.getSecondTeam().setPlayers(new ArrayList<>());
-        setStrategy(matchEntity);
-        return startMatch(matchEntity);
-    }
 
     private void setStrategy(MatchEntity matchEntity) {
         if(matchEntity.getRunStrategy().equals("Equal"))
@@ -63,7 +54,7 @@ public class MatchServiceImpl implements MatchService {
         RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.WEIGHTED;
     }
 
-    private void endMatch(MatchEntity matchEntity) {
+    private void endMatch(MatchEntity matchEntity,Match currentMatch) {
         scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
         scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
         System.out.println("--------------------------------------------------------------------------------------------------");

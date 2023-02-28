@@ -19,7 +19,7 @@ public class MatchController {
 
     @PostMapping("/start/{matchId}")
     public ResponseDTO start(@PathVariable Long matchId){
-        matchService.matchPreparation(matchId);
+        matchService.startMatch(matchId);
         return new ResponseDTO(true,"none");
     }
 

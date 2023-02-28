@@ -30,6 +30,8 @@ public class InningServiceImpl implements InningService{
     public void play(Match currentMatch,Team battingTeam, boolean isFirstInnings, Team bowlingTeam){
         totalWickets = battingTeam.getPlayers().size() - 1;
         ArrayList<Player> allBowlers = getAllBowlers(bowlingTeam);
+        if(allBowlers.size() == 0)
+            throw new ArithmeticException("There must be at least 2 bowlers in the team");
         Collections.shuffle(allBowlers);
         pitchService.setOpeners(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
         currentBatsmanNumber = 2;

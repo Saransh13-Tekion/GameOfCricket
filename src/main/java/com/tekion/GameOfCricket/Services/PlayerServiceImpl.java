@@ -1,5 +1,6 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.PlayerMongoRepository;
@@ -7,6 +8,7 @@ import com.tekion.GameOfCricket.Repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.Long;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,19 +36,20 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Override
     public void setPlayers(Team firstTeam,Team secondTeam){
-        if(firstTeam.getPlayers().size() == 0) {
-            List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
-            for (PlayerEntity player : players) {
-                if (player.getTeamID() == firstTeam.getTeamID()) {
-                    firstTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
-                } else {
-                    secondTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
-                }
+        if(firstTeam.getPlayers() == null){
+            firstTeam.setPlayers(new ArrayList<>());
+            secondTeam.setPlayers(new ArrayList<>());
+        }
+        List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
+        for (PlayerEntity player : players) {
+            if (player.getTeamID() == firstTeam.getTeamID()) {
+                firstTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
+            } else {
+                secondTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
             }
         }
-        else{
-            resetPlayers(firstTeam);
-            resetPlayers(secondTeam);
+        if(firstTeam.getPlayers().size() != secondTeam.getPlayers().size()){
+            throw new ArithmeticException("Unequal number of Players in both teams") ;
         }
     }
 

@@ -2,10 +2,12 @@ package com.tekion.GameOfCricket.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "Players")
+@NoArgsConstructor
 public class PlayerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,4 +20,8 @@ public class PlayerEntity {
 
     @Column(name = "Role")
     private String role;
+
+    public PlayerEntity(Long teamID){
+        this.teamID = teamID;
+    }
 }
