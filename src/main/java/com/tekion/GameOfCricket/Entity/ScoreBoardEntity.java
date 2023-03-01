@@ -3,12 +3,14 @@ package com.tekion.GameOfCricket.Entity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "ScoreBoard")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class ScoreBoardEntity extends BaseEntity{
 
     @Id

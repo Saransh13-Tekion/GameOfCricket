@@ -63,9 +63,6 @@ public class MatchServiceImpl implements MatchService {
     }
 
     private void endMatch(MatchEntity matchEntity,Match currentMatch) throws MissingDataException {
-        scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
-        scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
-        System.out.println("--------------------------------------------------------------------------------------------------");
         matchEntity.setWinner(currentMatch.getWinner());
         matchEntity.setUpdatedAt(LocalDateTime.now());
         matchRepository.save(matchEntity);

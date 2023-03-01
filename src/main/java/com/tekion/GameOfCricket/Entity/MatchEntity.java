@@ -2,12 +2,14 @@ package com.tekion.GameOfCricket.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "Matches")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class MatchEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

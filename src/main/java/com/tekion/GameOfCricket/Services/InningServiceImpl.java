@@ -53,15 +53,18 @@ public class InningServiceImpl implements InningService{
                 ballOperation(battingTeam,currRuns);
                 if(!isFirstInnings){
                     if(battingTeam.getTotalRuns() >= target){
-                        System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + (currentBall) + " Overs.");
-                        System.out.println(battingTeam.getName() + " won the match by " + (Constants.TOTAL_WICKETS - battingTeam.getWickets()) + " wickets.");
                         currentMatch.setWinner(battingTeam.getTeamID());
                         return;
                     }
                 }
             }
         }
-        inningAftermath(battingTeam,bowlingTeam,isFirstInnings,currentMatch);
+        if(isFirstInnings) {
+            target = battingTeam.getTotalRuns() + 1;
+        }
+        else{
+            currentMatch.setWinner(bowlingTeam.getTeamID());
+        }
     }
 
     private void ballOperation(Team battingTeam,int currRuns){
@@ -98,22 +101,6 @@ public class InningServiceImpl implements InningService{
             }
         }
         return bowlers;
-    }
-
-    private void inningAftermath(Team battingTeam, Team bowlingTeam,Boolean isFirstInnings,Match currentMatch){
-        if(battingTeam.isAllOut()){
-            System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + "." + currentBall + " Overs.");
-        }
-        else {
-            System.out.println(battingTeam.getName() + " has scored " + battingTeam.getTotalRuns() + " runs and lost " + battingTeam.getWickets() + " wickets in " + (currentOver) + ".0 Overs.");
-        }
-        if(isFirstInnings) {
-            target = battingTeam.getTotalRuns() + 1;
-        }
-        else{
-            System.out.println(bowlingTeam.getName() + " won the match by " + (target - battingTeam.getTotalRuns()) + " runs.");
-            currentMatch.setWinner(bowlingTeam.getTeamID());
-        }
     }
 
     @Override
