@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "Matches")
 @NoArgsConstructor
-public class MatchEntity {
+public class MatchEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -17,6 +17,7 @@ public class MatchEntity {
     private Long winner;
     private int numberOfOvers;
     private Long seriesID;
+    @Transient
     private String runStrategy;
 
     public MatchEntity(Long firstTeamID, Long secondTeamID, int numberOfOvers) {

@@ -2,6 +2,8 @@ package com.tekion.GameOfCricket.Controllers;
 
 import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.SeriesEntity;
+import com.tekion.GameOfCricket.Exception.MissingDataException;
+import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Services.SeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ public class SeriesController {
     }
 
     @PostMapping("/start/{id}")
-    public ResponseDTO start(@PathVariable Long id){
+    public ResponseDTO start(@PathVariable Long id) throws ValidationException, MissingDataException {
         seriesService.startSeries(id);
         return new ResponseDTO(true,"none");
     }

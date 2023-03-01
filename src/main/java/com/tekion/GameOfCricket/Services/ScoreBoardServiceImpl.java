@@ -10,6 +10,7 @@ import com.tekion.GameOfCricket.Utilities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Service
@@ -21,7 +22,9 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
     @Override
     public void saveStats(Team team, MatchEntity match){
         for(Player player:team.getPlayers()){
-            scoreBoardRepository.save(new ScoreBoardEntity(team.getTeamID(),match.getId(),player.getId(),player.getRuns(), player.getWicketsTaken(), player.getBallsPlayed(),player.getRole()));
+            ScoreBoardEntity scoreBoardEntity = new ScoreBoardEntity(team.getTeamID(),match.getId(),player.getId(),player.getRuns(), player.getWicketsTaken(), player.getBallsPlayed(),player.getRole());
+            scoreBoardEntity.setCreatedAt(LocalDateTime.now());
+            scoreBoardRepository.save(scoreBoardEntity);
         }
     }
 

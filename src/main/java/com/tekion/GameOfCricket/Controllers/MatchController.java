@@ -2,6 +2,8 @@ package com.tekion.GameOfCricket.Controllers;
 
 import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
+import com.tekion.GameOfCricket.Exception.MissingDataException;
+import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Services.MatchService;
 import com.tekion.GameOfCricket.Services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ public class MatchController {
     private TeamService teamService;
 
     @PostMapping("/start/{matchId}")
-    public ResponseDTO start(@PathVariable Long matchId){
+    public ResponseDTO start(@PathVariable Long matchId) throws ValidationException, MissingDataException {
         matchService.startMatch(matchId);
         return new ResponseDTO(true,"none");
     }

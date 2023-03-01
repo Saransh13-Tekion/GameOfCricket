@@ -1,10 +1,14 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
+import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Repository.PlayerRepository;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
@@ -24,27 +28,34 @@ public class PlayerServiceImplTest<e> {
     @InjectMocks
     PlayerServiceImpl playerService;
 
-    Team firstTeam = new Team(1L);
-    Team secondTeam = new Team(2L);
+    private Team firstTeam, secondTeam;
+    private List<PlayerEntity> players;
+
+    @BeforeEach
+    public void beforeMethod(){
+        firstTeam = new Team(1L);
+        firstTeam.setPlayers(new ArrayList<>());
+        secondTeam = new Team(2L);
+        secondTeam.setPlayers(new ArrayList<>());
+        players = new ArrayList<>();
+    }
 
     @Test
-    public void setPlayersPositive() {
-        List<PlayerEntity> players1 = new ArrayList<>();
-        players1.add(new PlayerEntity(1L));
-        players1.add(new PlayerEntity(2L));
+    public void testSetPlayers() throws ValidationException {
+        players.add(new PlayerEntity(1L));
+        players.add(new PlayerEntity(2L));
 
-        when(playerRepository.findAll()).thenReturn(players1);
+        when(playerRepository.findAll()).thenReturn(players);
 
         playerService.setPlayers(firstTeam,secondTeam);
         Assert.assertEquals(1,firstTeam.getPlayers().size());
     }
 
     @Test
-    public void setPlayerNegative(){
-        List<PlayerEntity> players1 = new ArrayList<>();
-        players1.add(new PlayerEntity(1L));
+    public void setPlayerValidationFailureTest(){
+        players.add(new PlayerEntity(1L));
 
-        when(playerRepository.findAll()).thenReturn(players1);
+        when(playerRepository.findAll()).thenReturn(players);
 
         try{
             playerService.setPlayers(firstTeam,secondTeam);

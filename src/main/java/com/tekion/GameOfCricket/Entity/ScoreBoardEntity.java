@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "ScoreBoard")
 @NoArgsConstructor
-public class ScoreBoardEntity {
+public class ScoreBoardEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

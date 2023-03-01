@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "Players")
 @NoArgsConstructor
-public class PlayerEntity {
+public class PlayerEntity extends BaseEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

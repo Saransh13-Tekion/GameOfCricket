@@ -1,6 +1,7 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
+import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Models.Match;
 import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
@@ -27,11 +28,11 @@ public class InningServiceImpl implements InningService{
     // isFirstInnings will be true for first innings and false for second innings
     //This function will take both batting and bowling team.
     @Override
-    public void play(Match currentMatch,Team battingTeam, boolean isFirstInnings, Team bowlingTeam){
+    public void play(Match currentMatch,Team battingTeam, boolean isFirstInnings, Team bowlingTeam) throws ValidationException {
         totalWickets = battingTeam.getPlayers().size() - 1;
         ArrayList<Player> allBowlers = getAllBowlers(bowlingTeam);
         if(allBowlers.size() <=1)
-            throw new ArithmeticException("There must be at least 2 bowlers in the team");
+            throw new ValidationException("There must be at least 2 bowlers in the team");
         Collections.shuffle(allBowlers);
         pitchService.setOpeners(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
         currentBatsmanNumber++;
@@ -92,7 +93,7 @@ public class InningServiceImpl implements InningService{
     private ArrayList<Player> getAllBowlers(Team bowlingTeam){
         ArrayList<Player> bowlers = new ArrayList<>();
         for(Player player : bowlingTeam.getPlayers()){
-            if(player.getRole() == PlayerRole.BOWLER){
+            if(PlayerRole.BOWLER.equals(player.getRole())){
                 bowlers.add(player);
             }
         }

@@ -2,6 +2,8 @@ package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.SeriesEntity;
+import com.tekion.GameOfCricket.Exception.MissingDataException;
+import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Repository.SeriesRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ class SeriesServiceImplTest {
 
 
     @Test
-    void startSeriesPositive() {
+    void testStartSeries() throws ValidationException, MissingDataException {
         SeriesEntity seriesEntity = new SeriesEntity();
         seriesEntity.setNumberOfMatches(1);
         seriesEntity.setFirstTeamID(1L);
@@ -45,7 +47,7 @@ class SeriesServiceImplTest {
     }
 
     @Test
-    void startSeriesNegative(){
+    void startSeriesValidationFailureTest(){
         try{
             seriesService.startSeries(1L);
         }

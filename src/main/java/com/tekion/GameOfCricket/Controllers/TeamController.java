@@ -3,6 +3,7 @@ package com.tekion.GameOfCricket.Controllers;
 
 import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.TeamEntity;
+import com.tekion.GameOfCricket.Exception.MissingDataException;
 import com.tekion.GameOfCricket.Services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class TeamController {
         return new ResponseDTO(true,"none");
     }
     @GetMapping("/{id}")
-    public TeamEntity getTeam(@PathVariable Long id){
+    public TeamEntity getTeam(@PathVariable Long id) throws MissingDataException {
         return teamService.getTeam(id);
     }
 }
