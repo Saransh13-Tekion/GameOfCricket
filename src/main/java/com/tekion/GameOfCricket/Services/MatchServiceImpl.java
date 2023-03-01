@@ -27,8 +27,11 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public Long startMatch(Long matchId) {
-        MatchEntity matchEntity = matchRepository.findById(matchId).orElse(null);
+        MatchEntity matchEntity = matchRepository.findById(matchId).orElseThrow(() -> new ArithmeticException("Required team not Found in Database"));
         Match currentMatch = new Match();
+        if(matchEntity.getFirstTeamID().equals(null) || matchEntity.getSecondTeamID().equals(null)){
+            throw new ArithmeticException("Incorrect Input of any of the 2 teams.");
+        }
         currentMatch.setFirstTeam(teamService.getTeam(matchEntity.getFirstTeamID()));
         currentMatch.setSecondTeam(teamService.getTeam(matchEntity.getSecondTeamID()));
         setStrategy(matchEntity);
@@ -48,10 +51,12 @@ public class MatchServiceImpl implements MatchService {
 
 
     private void setStrategy(MatchEntity matchEntity) {
-        if(matchEntity.getRunStrategy().equals("Equal"))
+        if(("Equal").equals(matchEntity.getRunStrategy()))
             RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.EQUAL;
-
-        RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.WEIGHTED;
+        if(("Equal").equals(matchEntity.getRunStrategy())) {
+            RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.WEIGHTED;
+        }
+        throw new ArithmeticException("Incorrect input of run strategy");
     }
 
     private void endMatch(MatchEntity matchEntity,Match currentMatch) {

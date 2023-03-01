@@ -22,8 +22,10 @@ public class Team {
     public Team(TeamEntity team) {
         this.name = team.getTeamName();
         this.teamID = team.getTeamID();
+        this.players = new ArrayList<>();
     }
     public Team(Long id){
         this.teamID = id;
+        this.players = new ArrayList<>();
     }
 }

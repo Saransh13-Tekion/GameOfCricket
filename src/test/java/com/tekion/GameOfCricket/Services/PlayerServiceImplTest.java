@@ -1,6 +1,7 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
+import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Repository.PlayerRepository;
 import org.junit.Assert;
@@ -27,7 +28,7 @@ public class PlayerServiceImplTest<e> {
     Team secondTeam = new Team(2L);
 
     @Test
-    public void setPlayers_Positive() {
+    public void setPlayersPositive() {
         List<PlayerEntity> players1 = new ArrayList<>();
         players1.add(new PlayerEntity(1L));
         players1.add(new PlayerEntity(2L));
@@ -39,7 +40,7 @@ public class PlayerServiceImplTest<e> {
     }
 
     @Test
-    public void setPlayer_Negative(){
+    public void setPlayerNegative(){
         List<PlayerEntity> players1 = new ArrayList<>();
         players1.add(new PlayerEntity(1L));
 

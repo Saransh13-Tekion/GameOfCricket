@@ -30,4 +30,10 @@ public class Player {
         ballsPlayed = 0;
         this.id = id;
     }
+
+    public Player(int runs,int ballsPlayed,int wickets){
+        this.runs = runs;
+        this.ballsPlayed = ballsPlayed;
+        this.wicketsTaken = wickets;
+    }
 }
