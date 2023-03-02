@@ -2,17 +2,16 @@ package com.tekion.GameOfCricket.Entity;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Entity
 @Table(name = "ScoreBoard")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=false)
+@AllArgsConstructor
+@Builder
 public class ScoreBoardEntity extends BaseEntity{
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -24,13 +23,4 @@ public class ScoreBoardEntity extends BaseEntity{
     private int ballsPlayed;
     private String playerRole;
 
-    public ScoreBoardEntity(Long teamId, Long matchId, Long playerId, int runsScored, int wicketsTaken, int ballsPlayed, PlayerRole playerRole) {
-        this.teamId = teamId;
-        this.matchId = matchId;
-        this.playerId = playerId;
-        this.runsScored = runsScored;
-        this.wicketsTaken = wicketsTaken;
-        this.ballsPlayed = ballsPlayed;
-        this.playerRole = playerRole.getPlayerRole();
-    }
 }

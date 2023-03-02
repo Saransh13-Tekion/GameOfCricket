@@ -1,6 +1,7 @@
 package com.tekion.GameOfCricket.Entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,5 @@ public class SeriesEntity extends BaseEntity{
     private int numberOfMatches;
     private int matchesFirstTeamWon;
     private int matchesSecondTeamWon;
-
 
 }

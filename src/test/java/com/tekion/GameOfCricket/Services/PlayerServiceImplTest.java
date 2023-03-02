@@ -33,17 +33,17 @@ public class PlayerServiceImplTest<e> {
 
     @BeforeEach
     public void beforeMethod(){
-        firstTeam = new Team(1L);
+        firstTeam = Team.builder().teamID(1L).build();
         firstTeam.setPlayers(new ArrayList<>());
-        secondTeam = new Team(2L);
+        secondTeam = Team.builder().teamID(2L).build();
         secondTeam.setPlayers(new ArrayList<>());
         players = new ArrayList<>();
     }
 
     @Test
     public void testSetPlayers() throws ValidationException {
-        players.add(new PlayerEntity(1L));
-        players.add(new PlayerEntity(2L));
+        players.add(PlayerEntity.builder().teamID(1L).build());
+        players.add(PlayerEntity.builder().teamID(2L).build());
 
         when(playerRepository.findAll()).thenReturn(players);
 
@@ -53,7 +53,7 @@ public class PlayerServiceImplTest<e> {
 
     @Test
     public void setPlayerValidationFailureTest(){
-        players.add(new PlayerEntity(1L));
+        players.add(PlayerEntity.builder().teamID(1L).build());
 
         when(playerRepository.findAll()).thenReturn(players);
 

@@ -16,5 +16,4 @@ public class TeamEntity extends BaseEntity{
     private String teamName;
     private int totalMatches;
     private int matchesWon;
-
 }

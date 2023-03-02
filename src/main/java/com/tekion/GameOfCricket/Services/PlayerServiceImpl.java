@@ -1,6 +1,7 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
+import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Exception.*;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.PlayerMongoRepository;
@@ -38,11 +39,17 @@ public class PlayerServiceImpl implements PlayerService{
     @Override
     public void setPlayers(Team firstTeam,Team secondTeam) throws ValidationException {
         List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
-        for (PlayerEntity player : players) {
+        for (PlayerEntity playerEntity : players) {
+            Player player = Player.builder()
+                    .role((playerEntity.getRole() == "Bowler") ? PlayerRole.BOWLER:PlayerRole.BATSMAN)
+                    .teamID(playerEntity.getTeamID())
+                    .name(playerEntity.getName())
+                    .id(playerEntity.getId())
+                    .build();
             if (player.getTeamID() == firstTeam.getTeamID()) {
-                firstTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
+                firstTeam.getPlayers().add(player);
             } else {
-                secondTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
+                secondTeam.getPlayers().add(player);
             }
         }
         if(firstTeam.getPlayers().size() != secondTeam.getPlayers().size()){

@@ -22,7 +22,14 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
     @Override
     public void saveStats(Team team, MatchEntity match){
         for(Player player:team.getPlayers()){
-            ScoreBoardEntity scoreBoardEntity = new ScoreBoardEntity(team.getTeamID(),match.getId(),player.getId(),player.getRuns(), player.getWicketsTaken(), player.getBallsPlayed(),player.getRole());
+            ScoreBoardEntity scoreBoardEntity = ScoreBoardEntity.builder()
+                    .teamId(team.getTeamID())
+                    .matchId(match.getId())
+                    .playerId(player.getId())
+                    .wicketsTaken(player.getWicketsTaken())
+                    .ballsPlayed(player.getBallsPlayed())
+                    .playerRole(player.getRole().getPlayerRole())
+                    .build();
             scoreBoardEntity.setCreatedAt(LocalDateTime.now());
             scoreBoardRepository.save(scoreBoardEntity);
         }

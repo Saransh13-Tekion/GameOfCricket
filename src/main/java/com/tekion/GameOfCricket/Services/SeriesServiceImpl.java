@@ -34,7 +34,12 @@ public class SeriesServiceImpl implements SeriesService{
         SeriesEntity seriesEntity = seriesRepository.findById(id).orElseThrow(() -> new MissingDataException("Cannot find given series entity"));
         int firstTeamWin = 0,secondTeamWin = 0;
         for(Long matchNumber = 1L;matchNumber<=seriesEntity.getNumberOfMatches();matchNumber++) {
-            MatchEntity match = new MatchEntity(seriesEntity.getFirstTeamID(), seriesEntity.getSecondTeamID(), seriesEntity.getNumberOfOvers(),seriesEntity.getId());
+            MatchEntity match = MatchEntity.builder()
+                    .firstTeamID(seriesEntity.getFirstTeamID())
+                    .secondTeamID(seriesEntity.getSecondTeamID())
+                    .numberOfOvers(seriesEntity.getNumberOfOvers())
+                    .seriesID(seriesEntity.getId())
+                    .build();
             Long matchId = matchService.createMatch(match);
             Long winner = matchService.startMatch(matchId);
             if(seriesEntity.getFirstTeamID().equals(winner)){
