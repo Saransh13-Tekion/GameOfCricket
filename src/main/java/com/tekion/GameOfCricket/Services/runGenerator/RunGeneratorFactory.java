@@ -5,7 +5,7 @@ import com.tekion.GameOfCricket.Enums.RunGenerationStrategy;
 public class RunGeneratorFactory {
     public static RunGenerationStrategy runGenerationStrategy;
     public static RunGenerator runGenerator(){
-        if(runGenerationStrategy == RunGenerationStrategy.EQUAL) {
+        if(RunGenerationStrategy.EQUAL.equals(runGenerationStrategy)) {
             return new EqualRunGenerator();
         }
         else{

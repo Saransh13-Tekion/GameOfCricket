@@ -115,7 +115,7 @@ public class InningServiceImpl implements InningService{
         log.info("In the change bowler function of " + currentBowler.getName() + " Team.");
         int length = allBowlers.size();
         int index = (int)(Math.random()*length);
-        if(currentBowler != null) {
+        if(!currentBowler.equals(null)) {
             allBowlers.add(currentBowler);
         }
         currentBowler = allBowlers.get(index);

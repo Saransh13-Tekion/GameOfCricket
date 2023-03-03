@@ -7,7 +7,7 @@ public class WeightedRunGenerator implements RunGenerator {
     @Override
     public int generateRuns(PlayerRole playerRole) {
         int[] runs;
-        if(playerRole == PlayerRole.BATSMAN){
+        if(PlayerRole.BATSMAN.equals(playerRole)){
             runs = new int[]{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 6, 6, 6, 7, 7};
         }
         else{
