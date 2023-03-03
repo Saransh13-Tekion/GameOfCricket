@@ -41,7 +41,7 @@ public class PlayerServiceImpl implements PlayerService{
         List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
         for (PlayerEntity playerEntity : players) {
             Player player = Player.builder()
-                    .role((playerEntity.getRole() == "Bowler") ? PlayerRole.BOWLER:PlayerRole.BATSMAN)
+                    .role((playerEntity.getRole() == PlayerRole.BOWLER.getPlayerRole()) ? PlayerRole.BOWLER:PlayerRole.BATSMAN)
                     .teamID(playerEntity.getTeamID())
                     .name(playerEntity.getName())
                     .id(playerEntity.getId())

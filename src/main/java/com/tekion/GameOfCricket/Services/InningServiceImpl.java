@@ -19,8 +19,6 @@ public class InningServiceImpl implements InningService{
     @Autowired
     private PitchService pitchService;
     private int target = 0;
-    private int currentOver = 0;
-    private int currentBall = 0;
     private int totalWickets;
     private int currentBatsmanNumber = 0;
 
@@ -40,6 +38,8 @@ public class InningServiceImpl implements InningService{
         Player striker = pitchService.getStriker();
         Player currentBowler = pitchService.getCurrentBowler();
         RunGenerator runGenerator = RunGeneratorFactory.runGenerator();
+        int currentOver = 0;
+        int currentBall;
         for(; currentOver < currentMatch.getTotalOvers(); currentOver++){
             if(battingTeam.isAllOut())
                 break;

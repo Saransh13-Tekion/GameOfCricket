@@ -12,9 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ScoreBoardEntity extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private Long teamId;
     private Long matchId;
     private Long playerId;

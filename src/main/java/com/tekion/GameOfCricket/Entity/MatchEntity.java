@@ -11,9 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class MatchEntity extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private Long firstTeamID;
     private Long secondTeamID;
     private Long winner;

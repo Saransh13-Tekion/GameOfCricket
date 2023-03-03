@@ -10,9 +10,6 @@ import lombok.EqualsAndHashCode;
 @Table(name = "Teams")
 @EqualsAndHashCode(callSuper=false)
 public class TeamEntity extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long teamID;
     private String teamName;
     private int totalMatches;
     private int matchesWon;

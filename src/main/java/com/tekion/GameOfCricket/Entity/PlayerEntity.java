@@ -11,10 +11,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class PlayerEntity extends BaseEntity{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private String name;
     private int wicketsTaken;
     @Builder.Default
@@ -22,7 +18,6 @@ public class PlayerEntity extends BaseEntity{
     @Builder.Default
     private int ballsPlayed = 0;
     private Long teamID;
-    @Column(name = "Role")
     private String role;
 
 }
