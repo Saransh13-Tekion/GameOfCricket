@@ -5,6 +5,8 @@ import com.tekion.GameOfCricket.Entity.TeamEntity;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
 import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Repository.TeamRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ public class TeamServiceImpl implements TeamService{
 
     @Autowired
     private TeamRepository teamRepository;
-
+    static Logger log = LogManager.getLogger(TeamServiceImpl.class);
     @Override
     public void addTeam(List<TeamEntity> teams){
         for(TeamEntity team : teams) {
@@ -44,6 +46,7 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public void saveStats(MatchEntity matchEntity) throws MissingDataException {
+        log.info("Saving Team stats");
         TeamEntity team = teamRepository.findById(matchEntity.getFirstTeamID()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
         team.setTotalMatches(team.getTotalMatches()+1);
         team = teamRepository.findById(matchEntity.getSecondTeamID()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));;

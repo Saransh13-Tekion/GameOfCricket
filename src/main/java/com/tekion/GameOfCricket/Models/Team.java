@@ -30,7 +30,7 @@ public class Team {
 
     public Team(TeamEntity team) {
         this.name = team.getTeamName();
-        this.teamID = team.getTeamID();
+        this.teamID = team.getId();
         this.players = new ArrayList<>();
     }
 }

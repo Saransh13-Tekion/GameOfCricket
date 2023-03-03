@@ -8,6 +8,8 @@ import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Services.runGenerator.RunGenerator;
 import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
 import com.tekion.GameOfCricket.Utilities.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +23,20 @@ public class InningServiceImpl implements InningService{
     private int target = 0;
     private int totalWickets;
     private int currentBatsmanNumber = 0;
+    static Logger log = LogManager.getLogger(InningServiceImpl.class);
 
     // Method for paying innings, taking battingTeam and current innings argument
     // isFirstInnings will be true for first innings and false for second innings
     //This function will take both batting and bowling team.
     @Override
     public void play(Match currentMatch,Team battingTeam, boolean isFirstInnings, Team bowlingTeam) throws ValidationException {
+        log.info("In the Play match, Batting Team is " + battingTeam.getName() + ". Bowling Team is " + bowlingTeam.getName() +".");
         totalWickets = battingTeam.getPlayers().size() - 1;
         ArrayList<Player> allBowlers = getAllBowlers(bowlingTeam);
-        if(allBowlers.size() <=1)
+        if(allBowlers.size() <=1) {
+            log.error("There are Less than/equal to 1 bowler in " + bowlingTeam.getName());
             throw new ValidationException("There must be at least 2 bowlers in the team");
+        }
         Collections.shuffle(allBowlers);
         pitchService.setOpeners(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
         currentBatsmanNumber++;
@@ -65,6 +71,7 @@ public class InningServiceImpl implements InningService{
         else{
             currentMatch.setWinner(bowlingTeam.getTeamID());
         }
+        log.info("Exiting the play Function.");
     }
 
     private void ballOperation(Team battingTeam,int currRuns){
@@ -105,6 +112,7 @@ public class InningServiceImpl implements InningService{
 
     @Override
     public Player changeBowler(Player currentBowler, ArrayList<Player>allBowlers){
+        log.info("In the change bowler function of " + currentBowler.getName() + " Team.");
         int length = allBowlers.size();
         int index = (int)(Math.random()*length);
         if(currentBowler != null) {

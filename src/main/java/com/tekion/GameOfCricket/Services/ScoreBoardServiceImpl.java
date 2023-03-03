@@ -2,14 +2,13 @@ package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
-import com.tekion.GameOfCricket.Enums.*;
 import com.tekion.GameOfCricket.Models.Player;
 import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Repository.ScoreBoardRepository;
-import com.tekion.GameOfCricket.Utilities.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -18,9 +17,10 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
 
     @Autowired
     private ScoreBoardRepository scoreBoardRepository;
-
+    static Logger log = LogManager.getLogger(ScoreBoardServiceImpl.class);
     @Override
     public void saveStats(Team team, MatchEntity match){
+        log.info("Saving Scoreboard stats of match " + match.getId());
         for(Player player:team.getPlayers()){
             ScoreBoardEntity scoreBoardEntity = ScoreBoardEntity.builder()
                     .teamId(team.getTeamID())
@@ -37,6 +37,7 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
 
     @Override
     public ScoreBoardEntity getRecord(Long matchId,Long playerId){
+        log.info("Fetching Record of player " + playerId + " in match " + matchId);
         ArrayList<ScoreBoardEntity> records = (ArrayList<ScoreBoardEntity>) scoreBoardRepository.findAll();
         for(ScoreBoardEntity record : records){
             if(record.getPlayerId().equals(playerId) && record.getMatchId().equals(matchId)){

@@ -6,6 +6,8 @@ import com.tekion.GameOfCricket.Exception.*;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.PlayerMongoRepository;
 import com.tekion.GameOfCricket.Repository.PlayerRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.Long;
@@ -17,9 +19,9 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Autowired
     private PlayerRepository playerRepository;
-
     @Autowired
     private PlayerMongoRepository playerMongoRepository;
+    static Logger log = LogManager.getLogger(MatchServiceImpl.class);
 
     @Override
     public void addPlayer(List<PlayerEntity> players){
@@ -38,10 +40,11 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Override
     public void setPlayers(Team firstTeam,Team secondTeam) throws ValidationException {
+        log.info("Setting Players for teams - " + firstTeam.getName() + "," + secondTeam.getName());
         List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
         for (PlayerEntity playerEntity : players) {
             Player player = Player.builder()
-                    .role((playerEntity.getRole() == PlayerRole.BOWLER.getPlayerRole()) ? PlayerRole.BOWLER:PlayerRole.BATSMAN)
+                    .role((PlayerRole.BOWLER.getPlayerRole().equals(playerEntity.getRole())) ? PlayerRole.BOWLER:PlayerRole.BATSMAN)
                     .teamID(playerEntity.getTeamID())
                     .name(playerEntity.getName())
                     .id(playerEntity.getId())
@@ -53,12 +56,14 @@ public class PlayerServiceImpl implements PlayerService{
             }
         }
         if(firstTeam.getPlayers().size() != secondTeam.getPlayers().size()){
+            log.error("Unequal number of Players in both teams");
             throw new ValidationException("Unequal number of Players in both teams") ;
         }
     }
 
     @Override
     public void saveStats(Team team) throws MissingDataException {
+        log.info("Saving Stats of team " + team.getName());
         for(Player player:team.getPlayers()){
             PlayerEntity playerEntity = playerRepository.findById(player.getId()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
             if(playerEntity != null){

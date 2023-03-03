@@ -7,6 +7,8 @@ import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.MatchRepository;
 import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +28,15 @@ public class MatchServiceImpl implements MatchService {
     private ScoreBoardService scoreBoardService;
     @Autowired
     private TeamService teamService;
-
+    static Logger log = LogManager.getLogger(MatchServiceImpl.class);
 
     @Override
     public Long startMatch(Long matchId) throws MissingDataException, ValidationException {
+        log.info("In the start match function of match " + matchId);
         MatchEntity matchEntity = matchRepository.findById(matchId).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
         Match currentMatch = new Match();
         if(matchEntity.getFirstTeamID().equals(null) || matchEntity.getSecondTeamID().equals(null)){
+            log.error("Any of the 2 Teams is missing.");
             throw new MissingDataException("Incorrect Input of any of the 2 teams.");
         }
         currentMatch.setFirstTeam(teamService.getTeam(matchEntity.getFirstTeamID()));
@@ -49,6 +53,7 @@ public class MatchServiceImpl implements MatchService {
             inningService.play(currentMatch,currentMatch.getFirstTeam(), false, currentMatch.getSecondTeam());
         }
         endMatch(matchEntity,currentMatch);
+        log.error("Exiting the start match method.");
         return currentMatch.getWinner();
     }
 
@@ -63,6 +68,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     private void endMatch(MatchEntity matchEntity,Match currentMatch) throws MissingDataException {
+        log.info("Entering the end match method of match " + matchEntity.getId());
         matchEntity.setWinner(currentMatch.getWinner());
         matchEntity.setUpdatedAt(LocalDateTime.now());
         matchRepository.save(matchEntity);
@@ -86,6 +92,7 @@ public class MatchServiceImpl implements MatchService {
     @Override
     public Long createMatch(MatchEntity match) {
         match.setCreatedAt(LocalDateTime.now());
+        log.info("Creating match of match id " + match.getId());
         return matchRepository.save(match).getId();
     }
 }

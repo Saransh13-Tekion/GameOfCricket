@@ -5,6 +5,8 @@ import com.tekion.GameOfCricket.Entity.SeriesEntity;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
 import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Repository.SeriesRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class SeriesServiceImpl implements SeriesService{
     private SeriesRepository seriesRepository;
     @Autowired
     private MatchService matchService;
+    static Logger log = LogManager.getLogger(SeriesServiceImpl.class);
 
     @Override
     public void createSeries(SeriesEntity seriesEntity) {
@@ -31,6 +34,7 @@ public class SeriesServiceImpl implements SeriesService{
 
     @Override
     public void startSeries(Long id) throws MissingDataException, ValidationException {
+        log.info("Starting Series of id " + id);
         SeriesEntity seriesEntity = seriesRepository.findById(id).orElseThrow(() -> new MissingDataException("Cannot find given series entity"));
         int firstTeamWin = 0,secondTeamWin = 0;
         for(Long matchNumber = 1L;matchNumber<=seriesEntity.getNumberOfMatches();matchNumber++) {
@@ -54,5 +58,6 @@ public class SeriesServiceImpl implements SeriesService{
         seriesEntity.setMatchesSecondTeamWon(secondTeamWin);
         seriesEntity.setUpdatedAt(LocalDateTime.now());
         seriesRepository.save(seriesEntity);
+        log.info("Exiting the Start Series method of id " + id);
     }
 }
