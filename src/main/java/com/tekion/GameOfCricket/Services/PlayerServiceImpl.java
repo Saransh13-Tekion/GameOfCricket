@@ -1,12 +1,17 @@
 package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
+import com.tekion.GameOfCricket.Enums.PlayerRole;
+import com.tekion.GameOfCricket.Exception.*;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.PlayerMongoRepository;
 import com.tekion.GameOfCricket.Repository.PlayerRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.Long;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -14,13 +19,14 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Autowired
     private PlayerRepository playerRepository;
-
     @Autowired
     private PlayerMongoRepository playerMongoRepository;
+    static Logger log = LogManager.getLogger(MatchServiceImpl.class);
 
     @Override
     public void addPlayer(List<PlayerEntity> players){
         for(PlayerEntity player:players) {
+            player.setCreatedAt(LocalDateTime.now());
             playerRepository.save(player);
            // playerMongoRepository.save(new PlayerDocument(1L));
         }
@@ -33,44 +39,40 @@ public class PlayerServiceImpl implements PlayerService{
 
 
     @Override
-    public void setPlayers(Team firstTeam,Team secondTeam){
-        if(firstTeam.getPlayers().size() == 0) {
-            List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
-            for (PlayerEntity player : players) {
-                if (player.getTeamID() == firstTeam.getTeamID()) {
-                    firstTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
-                } else {
-                    secondTeam.getPlayers().add(new Player(player.getRole(), player.getTeamID(), player.getName(), player.getId()));
-                }
+    public void setPlayers(Team firstTeam,Team secondTeam) throws ValidationException {
+        log.info("Setting Players for teams - " + firstTeam.getName() + "," + secondTeam.getName());
+        List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
+        for (PlayerEntity playerEntity : players) {
+            Player player = Player.builder()
+                    .role((PlayerRole.BOWLER.getPlayerRole().equals(playerEntity.getRole())) ? PlayerRole.BOWLER:PlayerRole.BATSMAN)
+                    .teamID(playerEntity.getTeamID())
+                    .name(playerEntity.getName())
+                    .id(playerEntity.getId())
+                    .build();
+            if (player.getTeamID() == firstTeam.getTeamID()) {
+                firstTeam.getPlayers().add(player);
+            } else {
+                secondTeam.getPlayers().add(player);
             }
         }
-        else{
-            resetPlayers(firstTeam);
-            resetPlayers(secondTeam);
+        if(firstTeam.getPlayers().size() != secondTeam.getPlayers().size()){
+            log.error("Unequal number of Players in both teams");
+            throw new ValidationException("Unequal number of Players in both teams") ;
         }
     }
 
     @Override
-    public void resetPlayers(Team team){
+    public void saveStats(Team team) throws MissingDataException {
+        log.info("Saving Stats of team " + team.getName());
         for(Player player:team.getPlayers()){
-            player.setRuns(0);
-            player.setGotOut(false);
-            player.setWicketsTaken(0);
-            player.setBallsPlayed(0);
-        }
-    }
-
-    @Override
-    public void saveStats(Team team){
-        for(Player player:team.getPlayers()){
-            PlayerEntity playerEntity = playerRepository.findById(player.getId()).orElse(null);
+            PlayerEntity playerEntity = playerRepository.findById(player.getId()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
             if(playerEntity != null){
                 playerEntity.setRuns(playerEntity.getRuns()+ player.getRuns());
                 playerEntity.setBallsPlayed(playerEntity.getBallsPlayed() + player.getBallsPlayed());
                 playerEntity.setWicketsTaken(playerEntity.getWicketsTaken()+player.getWicketsTaken());
+                playerEntity.setUpdatedAt(LocalDateTime.now());
                 playerRepository.save(playerEntity);
             }
-
         }
     }
 

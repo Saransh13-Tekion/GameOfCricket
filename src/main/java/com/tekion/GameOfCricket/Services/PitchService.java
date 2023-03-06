@@ -9,4 +9,6 @@ public interface PitchService {
     void setStriker(Player player);
     Player getNonStriker();
     Player getStriker();
+    void setCurrentBowler(Player currentBowler);
+    Player getCurrentBowler();
 }

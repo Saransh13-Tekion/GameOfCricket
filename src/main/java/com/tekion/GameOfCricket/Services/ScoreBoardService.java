@@ -6,7 +6,6 @@ import com.tekion.GameOfCricket.Models.Team;
 
 
 public interface ScoreBoardService {
-    void printScoreBoard(Team team);
     void saveStats(Team team, MatchEntity match);
     ScoreBoardEntity getRecord(Long matchId,Long playerId);
 }

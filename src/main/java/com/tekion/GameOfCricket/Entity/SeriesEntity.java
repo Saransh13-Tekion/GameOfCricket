@@ -1,15 +1,16 @@
 package com.tekion.GameOfCricket.Entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name = "Series")
-public class SeriesEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+@EqualsAndHashCode(callSuper=false)
+public class SeriesEntity extends BaseEntity{
     private Long firstTeamID;
     private Long secondTeamID;
     private Long winner;

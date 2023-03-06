@@ -2,12 +2,17 @@ package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.Entity.*;
 import com.tekion.GameOfCricket.Enums.RunGenerationStrategy;
+import com.tekion.GameOfCricket.Exception.MissingDataException;
+import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Models.*;
 import com.tekion.GameOfCricket.Repository.MatchRepository;
 import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -23,24 +28,23 @@ public class MatchServiceImpl implements MatchService {
     private ScoreBoardService scoreBoardService;
     @Autowired
     private TeamService teamService;
-
-    private Match currentMatch;
+    static Logger log = LogManager.getLogger(MatchServiceImpl.class);
 
     @Override
-    public Long startMatch(Long id) {
-        MatchEntity matchEntity = matchRepository.findById(id).orElse(null);
-        TeamEntity firstTeam = this.teamService.getTeam(matchEntity.getFirstTeamID());
-        TeamEntity secondTeam = this.teamService.getTeam(matchEntity.getSecondTeamID());
-        this.currentMatch = new Match();
-        currentMatch.setFirstTeam(firstTeam);
-        currentMatch.setSecondTeam(secondTeam);
-        currentMatch.getFirstTeam().setPlayers(new ArrayList<>());
-        currentMatch.getSecondTeam().setPlayers(new ArrayList<>());
+    public Long startMatch(Long matchId) throws MissingDataException, ValidationException {
+        log.info("In the start match function of match " + matchId);
+        MatchEntity matchEntity = matchRepository.findById(matchId).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
+        Match currentMatch = new Match();
+        if(matchEntity.getFirstTeamID().equals(null) || matchEntity.getSecondTeamID().equals(null)){
+            log.error("Any of the 2 Teams is missing.");
+            throw new MissingDataException("Incorrect Input of any of the 2 teams.");
+        }
+        currentMatch.setFirstTeam(teamService.getTeam(matchEntity.getFirstTeamID()));
+        currentMatch.setSecondTeam(teamService.getTeam(matchEntity.getSecondTeamID()));
+        setStrategy(matchEntity);
         int tossResult = toss(); // Running toss method
-        teamService.resetTeam(currentMatch.getFirstTeam(), currentMatch.getSecondTeam());
         playerService.setPlayers(currentMatch.getFirstTeam(), currentMatch.getSecondTeam());
         currentMatch.setTotalOvers(matchEntity.getNumberOfOvers());
-        setStrategy(matchEntity);
         if (tossResult == 0) { // Playing match according to the output of toss
             inningService.play(currentMatch,currentMatch.getFirstTeam(), true, currentMatch.getSecondTeam());
             inningService.play(currentMatch,currentMatch.getSecondTeam(), false, currentMatch.getFirstTeam());
@@ -48,22 +52,25 @@ public class MatchServiceImpl implements MatchService {
             inningService.play(currentMatch,currentMatch.getSecondTeam(), true, currentMatch.getFirstTeam());
             inningService.play(currentMatch,currentMatch.getFirstTeam(), false, currentMatch.getSecondTeam());
         }
-        endMatch(matchEntity);
+        endMatch(matchEntity,currentMatch);
+        log.error("Exiting the start match method.");
         return currentMatch.getWinner();
     }
 
-    private void setStrategy(MatchEntity matchEntity) {
-        if(matchEntity.getRunStrategy().equals("Equal"))
-            RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.EQUAL;
 
-        RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.WEIGHTED;
+    private void setStrategy(MatchEntity matchEntity) throws ValidationException {
+        if(RunGenerationStrategy.EQUAL.equals(matchEntity.getRunStrategy())) {
+            RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.EQUAL;
+        }
+        else{
+            RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.WEIGHTED;
+        }
     }
 
-    private void endMatch(MatchEntity matchEntity) {
-        scoreBoardService.printScoreBoard(currentMatch.getFirstTeam());
-        scoreBoardService.printScoreBoard(currentMatch.getSecondTeam());
-        System.out.println("--------------------------------------------------------------------------------------------------");
+    private void endMatch(MatchEntity matchEntity,Match currentMatch) throws MissingDataException {
+        log.info("Entering the end match method of match " + matchEntity.getId());
         matchEntity.setWinner(currentMatch.getWinner());
+        matchEntity.setUpdatedAt(LocalDateTime.now());
         matchRepository.save(matchEntity);
         scoreBoardService.saveStats(currentMatch.getFirstTeam(), matchEntity);
         scoreBoardService.saveStats(currentMatch.getSecondTeam(), matchEntity);
@@ -71,11 +78,6 @@ public class MatchServiceImpl implements MatchService {
         playerService.saveStats(currentMatch.getSecondTeam());
         teamService.saveStats(matchEntity);
     }
-
-    // Method for paying innings, taking battingTeam and current innings argument
-    // isFirstInnings will be true for first innings and false for second innings
-    //This function will take both batting and bowling team.
-
 
     @Override
     public int toss() {
@@ -89,6 +91,8 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public Long createMatch(MatchEntity match) {
+        match.setCreatedAt(LocalDateTime.now());
+        log.info("Creating match of match id " + match.getId());
         return matchRepository.save(match).getId();
     }
 }
