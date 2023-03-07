@@ -1,10 +1,10 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.DTO.MatchDTO;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Exception.ValidationException;
-import com.tekion.GameOfCricket.Models.Match;
-import com.tekion.GameOfCricket.Models.Player;
-import com.tekion.GameOfCricket.Models.Team;
+import com.tekion.GameOfCricket.DTO.PlayerDTO;
+import com.tekion.GameOfCricket.DTO.TeamDTO;
 import com.tekion.GameOfCricket.Services.runGenerator.RunGenerator;
 import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
 import com.tekion.GameOfCricket.Utilities.Constants;
@@ -25,14 +25,11 @@ public class InningServiceImpl implements InningService{
     private int currentBatsmanNumber = 0;
     static Logger log = LogManager.getLogger(InningServiceImpl.class);
 
-    // Method for paying innings, taking battingTeam and current innings argument
-    // isFirstInnings will be true for first innings and false for second innings
-    //This function will take both batting and bowling team.
     @Override
-    public void play(Match currentMatch,Team battingTeam, boolean isFirstInnings, Team bowlingTeam) throws ValidationException {
-        log.info("In the Play match, Batting Team is " + battingTeam.getName() + ". Bowling Team is " + bowlingTeam.getName() +".");
+    public void play(MatchDTO currentMatchDTO, TeamDTO battingTeam, boolean isFirstInnings, TeamDTO bowlingTeam) throws ValidationException {
+        log.info("In the Play match, Batting TeamDTO is " + battingTeam.getName() + ". Bowling TeamDTO is " + bowlingTeam.getName() +".");
         totalWickets = battingTeam.getPlayers().size() - 1;
-        ArrayList<Player> allBowlers = getAllBowlers(bowlingTeam);
+        ArrayList<PlayerDTO> allBowlers = getAllBowlers(bowlingTeam);
         if(allBowlers.size() <=1) {
             log.error("There are Less than/equal to 1 bowler in " + bowlingTeam.getName());
             throw new ValidationException("There must be at least 2 bowlers in the team");
@@ -41,12 +38,12 @@ public class InningServiceImpl implements InningService{
         pitchService.setOpeners(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
         currentBatsmanNumber++;
         pitchService.setCurrentBowler(allBowlers.get(0));
-        Player striker = pitchService.getStriker();
-        Player currentBowler = pitchService.getCurrentBowler();
+        PlayerDTO striker = pitchService.getStriker();
+        PlayerDTO currentBowler = pitchService.getCurrentBowler();
         RunGenerator runGenerator = RunGeneratorFactory.runGenerator();
         int currentOver = 0;
         int currentBall;
-        for(; currentOver < currentMatch.getTotalOvers(); currentOver++){
+        for(; currentOver < currentMatchDTO.getTotalOvers(); currentOver++){
             if(battingTeam.isAllOut())
                 break;
             currentBowler = changeBowler(currentBowler,allBowlers);
@@ -59,7 +56,7 @@ public class InningServiceImpl implements InningService{
                 ballOperation(battingTeam,currRuns);
                 if(!isFirstInnings){
                     if(battingTeam.getTotalRuns() >= target){
-                        currentMatch.setWinner(battingTeam.getTeamID());
+                        currentMatchDTO.setWinner(battingTeam.getTeamID());
                         return;
                     }
                 }
@@ -69,15 +66,15 @@ public class InningServiceImpl implements InningService{
             target = battingTeam.getTotalRuns() + 1;
         }
         else{
-            currentMatch.setWinner(bowlingTeam.getTeamID());
+            currentMatchDTO.setWinner(bowlingTeam.getTeamID());
         }
         log.info("Exiting the play Function.");
     }
 
-    private void ballOperation(Team battingTeam,int currRuns){
-        Player striker = pitchService.getStriker();
-        Player nonStriker = pitchService.getNonStriker();
-        Player currentBowler = pitchService.getCurrentBowler();
+    private void ballOperation(TeamDTO battingTeam, int currRuns){
+        PlayerDTO striker = pitchService.getStriker();
+        PlayerDTO nonStriker = pitchService.getNonStriker();
+        PlayerDTO currentBowler = pitchService.getCurrentBowler();
         striker.setBallsPlayed(striker.getBallsPlayed()+1);
         if(currRuns == Constants.WICKET_BALL) {
             battingTeam.setWickets(battingTeam.getWickets() + 1);
@@ -100,9 +97,9 @@ public class InningServiceImpl implements InningService{
         }
     }
 
-    private ArrayList<Player> getAllBowlers(Team bowlingTeam){
-        ArrayList<Player> bowlers = new ArrayList<>();
-        for(Player player : bowlingTeam.getPlayers()){
+    private ArrayList<PlayerDTO> getAllBowlers(TeamDTO bowlingTeam){
+        ArrayList<PlayerDTO> bowlers = new ArrayList<>();
+        for(PlayerDTO player : bowlingTeam.getPlayers()){
             if(PlayerRole.BOWLER.equals(player.getRole())){
                 bowlers.add(player);
             }
@@ -110,9 +107,8 @@ public class InningServiceImpl implements InningService{
         return bowlers;
     }
 
-    @Override
-    public Player changeBowler(Player currentBowler, ArrayList<Player>allBowlers){
-        log.info("In the change bowler function of " + currentBowler.getName() + " Team.");
+    private PlayerDTO changeBowler(PlayerDTO currentBowler, ArrayList<PlayerDTO>allBowlers){
+        log.info("In the change bowler function of " + currentBowler.getName() + " TeamDTO.");
         int length = allBowlers.size();
         int index = (int)(Math.random()*length);
         if(!currentBowler.equals(null)) {

@@ -1,9 +1,9 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.DTO.TeamDTO;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.TeamEntity;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
-import com.tekion.GameOfCricket.Models.Team;
 import com.tekion.GameOfCricket.Repository.TeamRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +28,7 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public void resetTeam(Team firstTeam,Team secondTeam){
+    public void resetTeam(TeamDTO firstTeam, TeamDTO secondTeam){
         firstTeam.setAllOut(false);
         firstTeam.setWickets(0);
         firstTeam.setBallsPlayed(0);
@@ -46,7 +46,7 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public void saveStats(MatchEntity matchEntity) throws MissingDataException {
-        log.info("Saving Team stats");
+        log.info("Saving TeamDTO stats");
         TeamEntity team = teamRepository.findById(matchEntity.getFirstTeamID()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
         team.setTotalMatches(team.getTotalMatches()+1);
         team = teamRepository.findById(matchEntity.getSecondTeamID()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));;
