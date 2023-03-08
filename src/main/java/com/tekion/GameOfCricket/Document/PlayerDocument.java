@@ -1,11 +1,12 @@
 package com.tekion.GameOfCricket.Document;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "Players")
+@Document
 @NoArgsConstructor
 public class PlayerDocument {
     @Id
