@@ -21,5 +21,5 @@ public interface SeriesService {
      * @param id id the required series.
      * @return returns the scoreboard record
      */
-    SeriesEntity getSeries(Long id);
+    SeriesEntity getSeries(Long id) throws MissingDataException;
 }

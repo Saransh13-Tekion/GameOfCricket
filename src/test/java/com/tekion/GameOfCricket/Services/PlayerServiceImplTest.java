@@ -1,13 +1,10 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.DTO.TeamDTO;
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Exception.ValidationException;
-import com.tekion.GameOfCricket.Models.Player;
-import com.tekion.GameOfCricket.Models.Team;
-import com.tekion.GameOfCricket.Repository.PlayerRepository;
+import com.tekion.GameOfCricket.SQLRepository.PlayerRepository;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class PlayerServiceImplTest<e> {
+public class PlayerServiceImplTest {
 
     @Mock
     PlayerRepository playerRepository;
@@ -28,14 +25,14 @@ public class PlayerServiceImplTest<e> {
     @InjectMocks
     PlayerServiceImpl playerService;
 
-    private Team firstTeam, secondTeam;
+    private TeamDTO firstTeam, secondTeam;
     private List<PlayerEntity> players;
 
     @BeforeEach
     public void beforeMethod(){
-        firstTeam = Team.builder().teamID(1L).build();
+        firstTeam = TeamDTO.builder().teamID(1L).build();
         firstTeam.setPlayers(new ArrayList<>());
-        secondTeam = Team.builder().teamID(2L).build();
+        secondTeam = TeamDTO.builder().teamID(2L).build();
         secondTeam.setPlayers(new ArrayList<>());
         players = new ArrayList<>();
     }

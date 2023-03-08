@@ -4,7 +4,7 @@ import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.SeriesEntity;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
 import com.tekion.GameOfCricket.Exception.ValidationException;
-import com.tekion.GameOfCricket.Repository.SeriesRepository;
+import com.tekion.GameOfCricket.SQLRepository.SeriesRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,8 @@ public class SeriesServiceImpl implements SeriesService{
     }
 
     @Override
-    public SeriesEntity getSeries(Long id){
-        return seriesRepository.findById(id).orElse(null);
+    public SeriesEntity getSeries(Long id) throws MissingDataException {
+        return seriesRepository.findById(id).orElseThrow(() -> new MissingDataException("Cannot find given series entity"));
     }
 
     @Override

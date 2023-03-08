@@ -4,7 +4,7 @@ import com.tekion.GameOfCricket.DTO.TeamDTO;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
 import com.tekion.GameOfCricket.DTO.PlayerDTO;
-import com.tekion.GameOfCricket.Repository.ScoreBoardRepository;
+import com.tekion.GameOfCricket.SQLRepository.ScoreBoardRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,7 +5,7 @@ import com.tekion.GameOfCricket.Entity.*;
 import com.tekion.GameOfCricket.Enums.RunGenerationStrategy;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
 import com.tekion.GameOfCricket.Exception.ValidationException;
-import com.tekion.GameOfCricket.Repository.MatchRepository;
+import com.tekion.GameOfCricket.SQLRepository.MatchRepository;
 import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

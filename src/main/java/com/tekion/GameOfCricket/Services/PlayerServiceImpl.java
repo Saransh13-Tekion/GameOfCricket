@@ -2,11 +2,11 @@ package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.DTO.PlayerDTO;
 import com.tekion.GameOfCricket.DTO.TeamDTO;
+import com.tekion.GameOfCricket.Document.PlayerDocument;
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Exception.*;
-import com.tekion.GameOfCricket.Repository.PlayerMongoRepository;
-import com.tekion.GameOfCricket.Repository.PlayerRepository;
+import com.tekion.GameOfCricket.SQLRepository.PlayerRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,6 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Autowired
     private PlayerRepository playerRepository;
-    @Autowired
-    private PlayerMongoRepository playerMongoRepository;
     static Logger log = LogManager.getLogger(MatchServiceImpl.class);
 
     @Override
@@ -29,7 +27,6 @@ public class PlayerServiceImpl implements PlayerService{
         for(PlayerEntity player:players) {
             player.setCreatedAt(LocalDateTime.now());
             playerRepository.save(player);
-           // playerMongoRepository.save(new PlayerDocument(1L));
         }
     }
 
