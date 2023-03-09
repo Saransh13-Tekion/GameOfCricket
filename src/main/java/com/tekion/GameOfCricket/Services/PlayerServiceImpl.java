@@ -62,15 +62,13 @@ public class PlayerServiceImpl implements PlayerService{
     @Override
     public void saveStats(TeamDTO team) throws MissingDataException {
         log.info("Saving Stats of team " + team.getName());
-        for(PlayerDTO player:team.getPlayers()){
+        for(PlayerDTO player:team.getPlayers()) {
             PlayerEntity playerEntity = playerRepository.findById(player.getId()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
-            if(playerEntity != null){
-                playerEntity.setRuns(playerEntity.getRuns()+ player.getRuns());
-                playerEntity.setBallsPlayed(playerEntity.getBallsPlayed() + player.getBallsPlayed());
-                playerEntity.setWicketsTaken(playerEntity.getWicketsTaken()+player.getWicketsTaken());
-                playerEntity.setUpdatedAt(LocalDateTime.now());
-                playerRepository.save(playerEntity);
-            }
+            playerEntity.setRuns(playerEntity.getRuns() + player.getRuns());
+            playerEntity.setBallsPlayed(playerEntity.getBallsPlayed() + player.getBallsPlayed());
+            playerEntity.setWicketsTaken(playerEntity.getWicketsTaken() + player.getWicketsTaken());
+            playerEntity.setUpdatedAt(LocalDateTime.now());
+            playerRepository.save(playerEntity);
         }
     }
 

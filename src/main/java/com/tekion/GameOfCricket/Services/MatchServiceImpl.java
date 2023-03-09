@@ -32,38 +32,33 @@ public class MatchServiceImpl implements MatchService {
     @Override
     public Long startMatch(Long matchId) throws MissingDataException, ValidationException {
         log.info("In the start match function of match " + matchId);
-        MatchEntity matchEntity = matchRepository.findById(matchId).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
-        MatchDTO currentMatchDTO = new MatchDTO();
+        MatchEntity matchEntity = matchRepository.findById(matchId).orElseThrow(() -> new MissingDataException("Required match not Found in Database"));
+        MatchDTO currentMatch = new MatchDTO();
         if(matchEntity.getFirstTeamID().equals(null) || matchEntity.getSecondTeamID().equals(null)){
             log.error("Any of the 2 Teams is missing.");
             throw new MissingDataException("Incorrect Input of any of the 2 teams.");
         }
-        currentMatchDTO.setFirstTeam(teamService.getTeam(matchEntity.getFirstTeamID()));
-        currentMatchDTO.setSecondTeam(teamService.getTeam(matchEntity.getSecondTeamID()));
+        currentMatch.setFirstTeam(teamService.getTeam(matchEntity.getFirstTeamID()));
+        currentMatch.setSecondTeam(teamService.getTeam(matchEntity.getSecondTeamID()));
         setStrategy(matchEntity);
         int tossResult = toss(); // Running toss method
-        playerService.setPlayers(currentMatchDTO.getFirstTeam(), currentMatchDTO.getSecondTeam());
-        currentMatchDTO.setTotalOvers(matchEntity.getNumberOfOvers());
+        playerService.setPlayers(currentMatch.getFirstTeam(), currentMatch.getSecondTeam());
+        currentMatch.setTotalOvers(matchEntity.getNumberOfOvers());
         if (tossResult == 0) { // Playing match according to the output of toss
-            inningService.play(currentMatchDTO, currentMatchDTO.getFirstTeam(), true, currentMatchDTO.getSecondTeam());
-            inningService.play(currentMatchDTO, currentMatchDTO.getSecondTeam(), false, currentMatchDTO.getFirstTeam());
+            inningService.play(currentMatch, currentMatch.getFirstTeam(), true, currentMatch.getSecondTeam());
+            inningService.play(currentMatch, currentMatch.getSecondTeam(), false, currentMatch.getFirstTeam());
         } else {
-            inningService.play(currentMatchDTO, currentMatchDTO.getSecondTeam(), true, currentMatchDTO.getFirstTeam());
-            inningService.play(currentMatchDTO, currentMatchDTO.getFirstTeam(), false, currentMatchDTO.getSecondTeam());
+            inningService.play(currentMatch, currentMatch.getSecondTeam(), true, currentMatch.getFirstTeam());
+            inningService.play(currentMatch, currentMatch.getFirstTeam(), false, currentMatch.getSecondTeam());
         }
-        endMatch(matchEntity, currentMatchDTO);
+        endMatch(matchEntity, currentMatch);
         log.error("Exiting the start match method.");
-        return currentMatchDTO.getWinner();
+        return currentMatch.getWinner();
     }
 
 
-    private void setStrategy(MatchEntity matchEntity) throws ValidationException {
-        if(RunGenerationStrategy.EQUAL.equals(matchEntity.getRunStrategy())) {
-            RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.EQUAL;
-        }
-        else{
-            RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.WEIGHTED;
-        }
+    private void setStrategy(MatchEntity matchEntity){
+        RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.EQUAL.equals(matchEntity.getRunStrategy())?RunGenerationStrategy.EQUAL:RunGenerationStrategy.WEIGHTED;
     }
 
     private void endMatch(MatchEntity matchEntity, MatchDTO currentMatchDTO) throws MissingDataException {

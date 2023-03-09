@@ -26,7 +26,8 @@ public class InningServiceImpl implements InningService{
     static Logger log = LogManager.getLogger(InningServiceImpl.class);
 
     @Override
-    public void play(MatchDTO currentMatchDTO, TeamDTO battingTeam, boolean isFirstInnings, TeamDTO bowlingTeam) throws ValidationException {
+    public void play(MatchDTO currentMatch, TeamDTO battingTeam, boolean isFirstInnings, TeamDTO bowlingTeam) throws ValidationException {
+        target = 0;
         log.info("In the Play match, Batting TeamDTO is " + battingTeam.getName() + ". Bowling TeamDTO is " + bowlingTeam.getName() +".");
         totalWickets = battingTeam.getPlayers().size() - 1;
         ArrayList<PlayerDTO> allBowlers = getAllBowlers(bowlingTeam);
@@ -43,7 +44,7 @@ public class InningServiceImpl implements InningService{
         RunGenerator runGenerator = RunGeneratorFactory.runGenerator();
         int currentOver = 0;
         int currentBall;
-        for(; currentOver < currentMatchDTO.getTotalOvers(); currentOver++){
+        for(; currentOver < currentMatch.getTotalOvers(); currentOver++){
             if(battingTeam.isAllOut())
                 break;
             currentBowler = changeBowler(currentBowler,allBowlers);
@@ -56,7 +57,7 @@ public class InningServiceImpl implements InningService{
                 ballOperation(battingTeam,currRuns);
                 if(!isFirstInnings){
                     if(battingTeam.getTotalRuns() >= target){
-                        currentMatchDTO.setWinner(battingTeam.getTeamID());
+                        currentMatch.setWinner(battingTeam.getTeamID());
                         return;
                     }
                 }
@@ -66,12 +67,12 @@ public class InningServiceImpl implements InningService{
             target = battingTeam.getTotalRuns() + 1;
         }
         else{
-            currentMatchDTO.setWinner(bowlingTeam.getTeamID());
+            currentMatch.setWinner(bowlingTeam.getTeamID());
         }
         log.info("Exiting the play Function.");
     }
 
-    private void ballOperation(TeamDTO battingTeam, int currRuns){
+    public void ballOperation(TeamDTO battingTeam, int currRuns){
         PlayerDTO striker = pitchService.getStriker();
         PlayerDTO nonStriker = pitchService.getNonStriker();
         PlayerDTO currentBowler = pitchService.getCurrentBowler();
@@ -97,7 +98,7 @@ public class InningServiceImpl implements InningService{
         }
     }
 
-    private ArrayList<PlayerDTO> getAllBowlers(TeamDTO bowlingTeam){
+    public ArrayList<PlayerDTO> getAllBowlers(TeamDTO bowlingTeam){
         ArrayList<PlayerDTO> bowlers = new ArrayList<>();
         for(PlayerDTO player : bowlingTeam.getPlayers()){
             if(PlayerRole.BOWLER.equals(player.getRole())){
@@ -107,11 +108,11 @@ public class InningServiceImpl implements InningService{
         return bowlers;
     }
 
-    private PlayerDTO changeBowler(PlayerDTO currentBowler, ArrayList<PlayerDTO>allBowlers){
-        log.info("In the change bowler function of " + currentBowler.getName() + " TeamDTO.");
+    public PlayerDTO changeBowler(PlayerDTO currentBowler, ArrayList<PlayerDTO>allBowlers){
+        log.info("In the change bowler function");
         int length = allBowlers.size();
         int index = (int)(Math.random()*length);
-        if(!currentBowler.equals(null)) {
+        if(currentBowler != null) {
             allBowlers.add(currentBowler);
         }
         currentBowler = allBowlers.get(index);
