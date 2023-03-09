@@ -1,47 +1,47 @@
 package com.tekion.GameOfCricket.Services;
 
-import com.tekion.GameOfCricket.Models.Player;
+import com.tekion.GameOfCricket.DTO.PlayerDTO;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PitchServiceImpl implements PitchService{
-    private Player striker, nonStriker, currentBowler;
+    private PlayerDTO striker, nonStriker, currentBowler;
 
     @Override
-    public Player getStriker() {
+    public PlayerDTO getStriker() {
         return striker;
     }
 
     @Override
-    public Player getNonStriker() {
+    public PlayerDTO getNonStriker() {
         return nonStriker;
     }
 
     @Override
-    public void setOpeners(Player striker, Player nonStriker){
+    public void setOpeners(PlayerDTO striker, PlayerDTO nonStriker){
         this.striker = striker;
         this.nonStriker = nonStriker;
     }
 
     @Override
     public void swap(){
-        Player temp = this.striker;
+        PlayerDTO temp = this.striker;
         this.striker = this.nonStriker;
         this.nonStriker = temp;
     }
 
     @Override
-    public void setStriker(Player player){
+    public void setStriker(PlayerDTO player){
         this.striker = player;
     }
 
     @Override
-    public Player getCurrentBowler(){
+    public PlayerDTO getCurrentBowler(){
         return currentBowler;
     }
 
     @Override
-    public void setCurrentBowler(Player currentBowler) {
+    public void setCurrentBowler(PlayerDTO currentBowler) {
         this.currentBowler = currentBowler;
     }
 }

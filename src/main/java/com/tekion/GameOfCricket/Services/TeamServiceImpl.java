@@ -3,8 +3,7 @@ package com.tekion.GameOfCricket.Services;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.TeamEntity;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
-import com.tekion.GameOfCricket.Models.Team;
-import com.tekion.GameOfCricket.Repository.TeamRepository;
+import com.tekion.GameOfCricket.SQLRepository.TeamRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,36 +27,20 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public void resetTeam(Team firstTeam,Team secondTeam){
-        firstTeam.setAllOut(false);
-        firstTeam.setWickets(0);
-        firstTeam.setBallsPlayed(0);
-        firstTeam.setTotalRuns(0);
-        firstTeam.setOversPlayed(0);
-        secondTeam.setOversPlayed(0);
-        secondTeam.setBallsPlayed(0);
-        secondTeam.setAllOut(false);
-        secondTeam.setTotalRuns(0);
-        secondTeam.setWickets(0);
-    }
-
-    @Override
     public TeamEntity getTeam(Long id) throws MissingDataException {return teamRepository.findById(id).orElseThrow(()->new MissingDataException("Required team not Found in Database"));}
 
     @Override
     public void saveStats(MatchEntity matchEntity) throws MissingDataException {
-        log.info("Saving Team stats");
+        log.info("Saving TeamDTO stats");
         TeamEntity team = teamRepository.findById(matchEntity.getFirstTeamID()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
-        team.setTotalMatches(team.getTotalMatches()+1);
-        team = teamRepository.findById(matchEntity.getSecondTeamID()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));;
-        team.setTotalMatches(team.getTotalMatches()+1);
+        team.setTotalMatches(team.getTotalMatches() + 1);
+        team = teamRepository.findById(matchEntity.getSecondTeamID()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
+        team.setTotalMatches(team.getTotalMatches() + 1);
         Long winner = matchEntity.getWinner();
-        team = teamRepository.findById(winner).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));;
-        if(team != null){
-            team.setMatchesWon(team.getMatchesWon()+1);
-            team.setUpdatedAt(LocalDateTime.now());
-            teamRepository.save(team);
-        }
+        team = teamRepository.findById(winner).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
+        team.setMatchesWon(team.getMatchesWon() + 1);
+        team.setUpdatedAt(LocalDateTime.now());
+        teamRepository.save(team);
     }
 
 }

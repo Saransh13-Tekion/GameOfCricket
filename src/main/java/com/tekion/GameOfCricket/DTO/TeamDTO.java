@@ -1,4 +1,4 @@
-package com.tekion.GameOfCricket.Models;
+package com.tekion.GameOfCricket.DTO;
 
 import com.tekion.GameOfCricket.Entity.TeamEntity;
 import lombok.AllArgsConstructor;
@@ -12,9 +12,9 @@ import java.util.*;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class Team {
+public class TeamDTO {
 
-    List<Player> players;
+    List<PlayerDTO> players;
     private String name;
     @Builder.Default
     private int totalRuns = 0;
@@ -28,7 +28,7 @@ public class Team {
     boolean isAllOut = false;
     private Long teamID;
 
-    public Team(TeamEntity team) {
+    public TeamDTO(TeamEntity team) {
         this.name = team.getTeamName();
         this.teamID = team.getId();
         this.players = new ArrayList<>();

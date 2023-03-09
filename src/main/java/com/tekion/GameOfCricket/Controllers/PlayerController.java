@@ -15,12 +15,20 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
+    /** Add players in database.
+     * @param players The players that are to be added in te database
+     * @return
+     */
     @PostMapping("/")
     public ResponseDTO add(@RequestBody List<PlayerEntity>players){
         playerService.addPlayer(players);
         return new ResponseDTO(true,"none");
     }
 
+    /** This method gets the required player from the database
+     * @param id id of the required player that needs to be fetched from the database
+     * @return
+     */
     @GetMapping("/{id}")
     public PlayerEntity get(@PathVariable Long id){
         return playerService.getPlayer(id);

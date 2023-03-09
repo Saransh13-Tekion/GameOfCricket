@@ -1,4 +1,4 @@
-package com.tekion.GameOfCricket.Models;
+package com.tekion.GameOfCricket.DTO;
 
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class Player {
+public class PlayerDTO {
     private Long id;
     private String name;
     private int wicketsTaken;

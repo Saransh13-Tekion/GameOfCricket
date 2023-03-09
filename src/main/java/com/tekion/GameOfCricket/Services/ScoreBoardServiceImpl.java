@@ -1,10 +1,10 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.DTO.TeamDTO;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
-import com.tekion.GameOfCricket.Models.Player;
-import com.tekion.GameOfCricket.Models.Team;
-import com.tekion.GameOfCricket.Repository.ScoreBoardRepository;
+import com.tekion.GameOfCricket.DTO.PlayerDTO;
+import com.tekion.GameOfCricket.SQLRepository.ScoreBoardRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,9 @@ public class ScoreBoardServiceImpl implements ScoreBoardService{
     private ScoreBoardRepository scoreBoardRepository;
     static Logger log = LogManager.getLogger(ScoreBoardServiceImpl.class);
     @Override
-    public void saveStats(Team team, MatchEntity match){
+    public void saveStats(TeamDTO team, MatchEntity match){
         log.info("Saving Scoreboard stats of match " + match.getId());
-        for(Player player:team.getPlayers()){
+        for(PlayerDTO player:team.getPlayers()){
             ScoreBoardEntity scoreBoardEntity = ScoreBoardEntity.builder()
                     .teamId(team.getTeamID())
                     .matchId(match.getId())

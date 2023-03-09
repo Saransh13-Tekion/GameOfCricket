@@ -15,20 +15,32 @@ public class SeriesController {
     @Autowired
     private SeriesService seriesService;
 
+    /** create the scoreboard record in the table
+     * @param seriesEntity the entity that needs to be saved.
+     */
     @PostMapping("/create")
     public ResponseDTO create(@RequestBody SeriesEntity seriesEntity){
         seriesService.createSeries(seriesEntity);
         return new ResponseDTO(true,"none");
     }
 
+    /** starts the series
+     * @param id takes the id of the series
+     * @throws MissingDataException if the given id is missing from the databse.
+     * @throws ValidationException invalid data.
+     */
     @PostMapping("/start/{id}")
     public ResponseDTO start(@PathVariable Long id) throws ValidationException, MissingDataException {
         seriesService.startSeries(id);
         return new ResponseDTO(true,"none");
     }
 
+    /** gets the record of the series from the database.
+     * @param id id the required series.
+     * @return returns the scoreboard record
+     */
     @GetMapping("/{id}")
-    public SeriesEntity get(@PathVariable Long id){
+    public SeriesEntity get(@PathVariable Long id) throws MissingDataException {
         return seriesService.getSeries(id);
     }
 

@@ -1,4 +1,4 @@
-package com.tekion.GameOfCricket.Repository;
+package com.tekion.GameOfCricket.SQLRepository;
 
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import org.springframework.data.repository.CrudRepository;

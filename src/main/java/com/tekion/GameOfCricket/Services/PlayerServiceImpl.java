@@ -1,11 +1,12 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.DTO.PlayerDTO;
+import com.tekion.GameOfCricket.DTO.TeamDTO;
+import com.tekion.GameOfCricket.Document.PlayerDocument;
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Exception.*;
-import com.tekion.GameOfCricket.Models.*;
-import com.tekion.GameOfCricket.Repository.PlayerMongoRepository;
-import com.tekion.GameOfCricket.Repository.PlayerRepository;
+import com.tekion.GameOfCricket.SQLRepository.PlayerRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,6 @@ public class PlayerServiceImpl implements PlayerService{
 
     @Autowired
     private PlayerRepository playerRepository;
-    @Autowired
-    private PlayerMongoRepository playerMongoRepository;
     static Logger log = LogManager.getLogger(MatchServiceImpl.class);
 
     @Override
@@ -28,7 +27,6 @@ public class PlayerServiceImpl implements PlayerService{
         for(PlayerEntity player:players) {
             player.setCreatedAt(LocalDateTime.now());
             playerRepository.save(player);
-           // playerMongoRepository.save(new PlayerDocument(1L));
         }
     }
 
@@ -39,11 +37,11 @@ public class PlayerServiceImpl implements PlayerService{
 
 
     @Override
-    public void setPlayers(Team firstTeam,Team secondTeam) throws ValidationException {
+    public void setPlayers(TeamDTO firstTeam, TeamDTO secondTeam) throws ValidationException {
         log.info("Setting Players for teams - " + firstTeam.getName() + "," + secondTeam.getName());
         List<PlayerEntity> players = (List<PlayerEntity>) playerRepository.findAll();
         for (PlayerEntity playerEntity : players) {
-            Player player = Player.builder()
+            PlayerDTO player = PlayerDTO.builder()
                     .role((PlayerRole.BOWLER.getPlayerRole().equals(playerEntity.getRole())) ? PlayerRole.BOWLER:PlayerRole.BATSMAN)
                     .teamID(playerEntity.getTeamID())
                     .name(playerEntity.getName())
@@ -62,17 +60,15 @@ public class PlayerServiceImpl implements PlayerService{
     }
 
     @Override
-    public void saveStats(Team team) throws MissingDataException {
+    public void saveStats(TeamDTO team) throws MissingDataException {
         log.info("Saving Stats of team " + team.getName());
-        for(Player player:team.getPlayers()){
+        for(PlayerDTO player:team.getPlayers()) {
             PlayerEntity playerEntity = playerRepository.findById(player.getId()).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
-            if(playerEntity != null){
-                playerEntity.setRuns(playerEntity.getRuns()+ player.getRuns());
-                playerEntity.setBallsPlayed(playerEntity.getBallsPlayed() + player.getBallsPlayed());
-                playerEntity.setWicketsTaken(playerEntity.getWicketsTaken()+player.getWicketsTaken());
-                playerEntity.setUpdatedAt(LocalDateTime.now());
-                playerRepository.save(playerEntity);
-            }
+            playerEntity.setRuns(playerEntity.getRuns() + player.getRuns());
+            playerEntity.setBallsPlayed(playerEntity.getBallsPlayed() + player.getBallsPlayed());
+            playerEntity.setWicketsTaken(playerEntity.getWicketsTaken() + player.getWicketsTaken());
+            playerEntity.setUpdatedAt(LocalDateTime.now());
+            playerRepository.save(playerEntity);
         }
     }
 

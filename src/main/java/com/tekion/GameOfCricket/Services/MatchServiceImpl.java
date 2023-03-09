@@ -1,11 +1,11 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.DTO.MatchDTO;
 import com.tekion.GameOfCricket.Entity.*;
 import com.tekion.GameOfCricket.Enums.RunGenerationStrategy;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
 import com.tekion.GameOfCricket.Exception.ValidationException;
-import com.tekion.GameOfCricket.Models.*;
-import com.tekion.GameOfCricket.Repository.MatchRepository;
+import com.tekion.GameOfCricket.SQLRepository.MatchRepository;
 import com.tekion.GameOfCricket.Services.runGenerator.RunGeneratorFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
 
 @Service
 public class MatchServiceImpl implements MatchService {
@@ -33,8 +32,8 @@ public class MatchServiceImpl implements MatchService {
     @Override
     public Long startMatch(Long matchId) throws MissingDataException, ValidationException {
         log.info("In the start match function of match " + matchId);
-        MatchEntity matchEntity = matchRepository.findById(matchId).orElseThrow(() -> new MissingDataException("Required team not Found in Database"));
-        Match currentMatch = new Match();
+        MatchEntity matchEntity = matchRepository.findById(matchId).orElseThrow(() -> new MissingDataException("Required match not Found in Database"));
+        MatchDTO currentMatch = new MatchDTO();
         if(matchEntity.getFirstTeamID().equals(null) || matchEntity.getSecondTeamID().equals(null)){
             log.error("Any of the 2 Teams is missing.");
             throw new MissingDataException("Incorrect Input of any of the 2 teams.");
@@ -46,41 +45,35 @@ public class MatchServiceImpl implements MatchService {
         playerService.setPlayers(currentMatch.getFirstTeam(), currentMatch.getSecondTeam());
         currentMatch.setTotalOvers(matchEntity.getNumberOfOvers());
         if (tossResult == 0) { // Playing match according to the output of toss
-            inningService.play(currentMatch,currentMatch.getFirstTeam(), true, currentMatch.getSecondTeam());
-            inningService.play(currentMatch,currentMatch.getSecondTeam(), false, currentMatch.getFirstTeam());
+            inningService.play(currentMatch, currentMatch.getFirstTeam(), true, currentMatch.getSecondTeam());
+            inningService.play(currentMatch, currentMatch.getSecondTeam(), false, currentMatch.getFirstTeam());
         } else {
-            inningService.play(currentMatch,currentMatch.getSecondTeam(), true, currentMatch.getFirstTeam());
-            inningService.play(currentMatch,currentMatch.getFirstTeam(), false, currentMatch.getSecondTeam());
+            inningService.play(currentMatch, currentMatch.getSecondTeam(), true, currentMatch.getFirstTeam());
+            inningService.play(currentMatch, currentMatch.getFirstTeam(), false, currentMatch.getSecondTeam());
         }
-        endMatch(matchEntity,currentMatch);
+        endMatch(matchEntity, currentMatch);
         log.error("Exiting the start match method.");
         return currentMatch.getWinner();
     }
 
 
-    private void setStrategy(MatchEntity matchEntity) throws ValidationException {
-        if(RunGenerationStrategy.EQUAL.equals(matchEntity.getRunStrategy())) {
-            RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.EQUAL;
-        }
-        else{
-            RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.WEIGHTED;
-        }
+    private void setStrategy(MatchEntity matchEntity){
+        RunGeneratorFactory.runGenerationStrategy = RunGenerationStrategy.EQUAL.equals(matchEntity.getRunStrategy())?RunGenerationStrategy.EQUAL:RunGenerationStrategy.WEIGHTED;
     }
 
-    private void endMatch(MatchEntity matchEntity,Match currentMatch) throws MissingDataException {
+    private void endMatch(MatchEntity matchEntity, MatchDTO currentMatchDTO) throws MissingDataException {
         log.info("Entering the end match method of match " + matchEntity.getId());
-        matchEntity.setWinner(currentMatch.getWinner());
+        matchEntity.setWinner(currentMatchDTO.getWinner());
         matchEntity.setUpdatedAt(LocalDateTime.now());
         matchRepository.save(matchEntity);
-        scoreBoardService.saveStats(currentMatch.getFirstTeam(), matchEntity);
-        scoreBoardService.saveStats(currentMatch.getSecondTeam(), matchEntity);
-        playerService.saveStats(currentMatch.getFirstTeam());
-        playerService.saveStats(currentMatch.getSecondTeam());
+        scoreBoardService.saveStats(currentMatchDTO.getFirstTeam(), matchEntity);
+        scoreBoardService.saveStats(currentMatchDTO.getSecondTeam(), matchEntity);
+        playerService.saveStats(currentMatchDTO.getFirstTeam());
+        playerService.saveStats(currentMatchDTO.getSecondTeam());
         teamService.saveStats(matchEntity);
     }
 
-    @Override
-    public int toss() {
+    private int toss() {
         return (int) (Math.random() * 2);
     }
 

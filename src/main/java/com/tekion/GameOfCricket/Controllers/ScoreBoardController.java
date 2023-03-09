@@ -12,6 +12,11 @@ public class ScoreBoardController {
     @Autowired
     private ScoreBoardService scoreBoardService;
 
+    /** gets the record from scoreboard table
+     * @param matchId match id of the record
+     * @param playerId player id of the player
+     * @return the record from the scoreboard
+     */
     @GetMapping("/{matchId}/{playerId}")
     public ScoreBoardEntity getRecord(@PathVariable Long matchId, @PathVariable Long playerId){
         return scoreBoardService.getRecord(matchId,playerId);

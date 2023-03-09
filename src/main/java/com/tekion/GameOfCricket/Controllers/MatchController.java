@@ -16,21 +16,32 @@ public class MatchController {
     @Autowired
     private MatchService matchService;
 
-    @Autowired
-    private TeamService teamService;
-
+    /** Start the match of given match id.
+     * @param matchId id of the match
+     * @return the response
+     * @throws ValidationException
+     * @throws MissingDataException
+     */
     @PostMapping("/start/{matchId}")
     public ResponseDTO start(@PathVariable Long matchId) throws ValidationException, MissingDataException {
         matchService.startMatch(matchId);
         return new ResponseDTO(true,"none");
     }
 
+    /** Create the match record
+     * @param matchEntity entity that need to be saved.
+     * @return the response
+     */
     @PostMapping("/create")
     public ResponseDTO createMatch(@RequestBody MatchEntity matchEntity){
         matchService.createMatch(matchEntity);
         return new ResponseDTO(true,"none");
     }
 
+    /** Get the records of the required match
+     * @param id  match id
+     * @return match of given id
+     */
     @GetMapping("/{id}")
     public MatchEntity getDetails(@PathVariable Long id){
         return matchService.getDetails(id);

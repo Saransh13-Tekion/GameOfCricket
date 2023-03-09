@@ -1,21 +1,21 @@
-package com.tekion.GameOfCricket.Models;
+package com.tekion.GameOfCricket.DTO;
 
 import com.tekion.GameOfCricket.Entity.TeamEntity;
 import lombok.Data;
 
 
 @Data
-public class Match {
-    private Team firstTeam, secondTeam;
+public class MatchDTO {
+    private TeamDTO firstTeam, secondTeam;
     private int totalOvers;
     private Long winner;
 
     public void setFirstTeam(TeamEntity team) {
-        this.firstTeam = new Team(team);
+        this.firstTeam = new TeamDTO(team);
     }
 
     public void setSecondTeam(TeamEntity team) {
-        this.secondTeam = new Team(team);
+        this.secondTeam = new TeamDTO(team);
     }
 
 }
