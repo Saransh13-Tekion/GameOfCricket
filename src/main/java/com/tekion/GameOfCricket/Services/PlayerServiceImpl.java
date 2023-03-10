@@ -2,7 +2,7 @@ package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.DTO.PlayerDTO;
 import com.tekion.GameOfCricket.DTO.TeamDTO;
-import com.tekion.GameOfCricket.Document.PlayerDocument;
+import com.tekion.GameOfCricket.Document.ScoreBoardES;
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
 import com.tekion.GameOfCricket.Exception.*;
@@ -28,6 +28,7 @@ public class PlayerServiceImpl implements PlayerService{
             player.setCreatedAt(LocalDateTime.now());
             playerRepository.save(player);
         }
+        ScoreBoardES sc = new ScoreBoardES();
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.tekion.GameOfCricket.Services;
 
+import com.tekion.GameOfCricket.Document.ScoreBoardES;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
-import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
 import com.tekion.GameOfCricket.DTO.TeamDTO;
+
+import java.util.Optional;
 
 
 public interface ScoreBoardService {
@@ -12,10 +14,12 @@ public interface ScoreBoardService {
      */
     void saveStats(TeamDTO team, MatchEntity match);
 
-    /** gets the record from scoreboard table
-     * @param matchId match id of the record
+    /**
+     * gets the record from scoreboard table
+     *
+     * @param matchId  match id of the record
      * @param playerId player id of the player
      * @return the record from the scoreboard
      */
-    ScoreBoardEntity getRecord(Long matchId,Long playerId);
+    ScoreBoardES getRecord(Long matchId, Long playerId);
 }

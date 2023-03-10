@@ -8,6 +8,12 @@ group = 'com.tekion'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 repositories {
 	mavenCentral()
 }
@@ -23,6 +29,7 @@ dependencies {
 	implementation 'org.elasticsearch:elasticsearch:7.15.1'
 	implementation 'log4j:log4j:1.2.17'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'jakarta.json:jakarta.json-api:2.1.1'
 	testImplementation 'org.mockito:mockito-core:5.1.1'
     testImplementation 'junit:junit:4.13.1'
     annotationProcessor 'org.projectlombok:lombok'
