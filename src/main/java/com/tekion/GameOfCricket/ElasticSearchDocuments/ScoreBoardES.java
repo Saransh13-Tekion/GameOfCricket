@@ -1,4 +1,4 @@
-package com.tekion.GameOfCricket.Document;
+package com.tekion.GameOfCricket.ElasticSearchDocuments;
 
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;

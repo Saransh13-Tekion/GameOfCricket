@@ -1,10 +1,8 @@
 package com.tekion.GameOfCricket.Services;
 
-import com.tekion.GameOfCricket.Document.ScoreBoardES;
+import com.tekion.GameOfCricket.ElasticSearchDocuments.ScoreBoardES;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.DTO.TeamDTO;
-
-import java.util.Optional;
 
 
 public interface ScoreBoardService {
