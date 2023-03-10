@@ -72,7 +72,7 @@ public class InningServiceImpl implements InningService{
         log.info("Exiting the play Function.");
     }
 
-    public void ballOperation(TeamDTO battingTeam, int currRuns){
+    private void ballOperation(TeamDTO battingTeam, int currRuns){
         PlayerDTO striker = pitchService.getStriker();
         PlayerDTO nonStriker = pitchService.getNonStriker();
         PlayerDTO currentBowler = pitchService.getCurrentBowler();
@@ -98,7 +98,7 @@ public class InningServiceImpl implements InningService{
         }
     }
 
-    public ArrayList<PlayerDTO> getAllBowlers(TeamDTO bowlingTeam){
+    private ArrayList<PlayerDTO> getAllBowlers(TeamDTO bowlingTeam){
         ArrayList<PlayerDTO> bowlers = new ArrayList<>();
         for(PlayerDTO player : bowlingTeam.getPlayers()){
             if(PlayerRole.BOWLER.equals(player.getRole())){
@@ -108,7 +108,7 @@ public class InningServiceImpl implements InningService{
         return bowlers;
     }
 
-    public PlayerDTO changeBowler(PlayerDTO currentBowler, ArrayList<PlayerDTO>allBowlers){
+    private PlayerDTO changeBowler(PlayerDTO currentBowler, ArrayList<PlayerDTO>allBowlers){
         log.info("In the change bowler function");
         int length = allBowlers.size();
         int index = (int)(Math.random()*length);
