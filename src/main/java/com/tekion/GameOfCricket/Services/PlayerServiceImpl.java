@@ -28,7 +28,6 @@ public class PlayerServiceImpl implements PlayerService{
             player.setCreatedAt(LocalDateTime.now());
             playerRepository.save(player);
         }
-        ScoreBoardES sc = new ScoreBoardES();
     }
 
     @Override
