@@ -2,6 +2,8 @@ package com.tekion.GameOfCricket.Services;
 
 import com.tekion.GameOfCricket.DTO.PlayerDTO;
 import com.tekion.GameOfCricket.DTO.TeamDTO;
+import com.tekion.GameOfCricket.ESRepository.ScoreBoardESRepository;
+import com.tekion.GameOfCricket.ElasticSearchDocuments.ScoreBoardES;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
 import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
 import com.tekion.GameOfCricket.Enums.PlayerRole;
@@ -27,6 +29,8 @@ class ScoreBoardServiceImplTest {
 
     @Mock
     private ScoreBoardRepository scoreBoardRepository;
+    @Mock
+    private ScoreBoardESRepository scoreBoardESRepository;
     @InjectMocks
     private ScoreBoardServiceImpl scoreBoardService;
 
@@ -43,13 +47,13 @@ class ScoreBoardServiceImplTest {
 
     @Test
     void getRecordTest() {
-        List<ScoreBoardEntity> scores = new ArrayList<>();
-        ScoreBoardEntity demo = ScoreBoardEntity.builder()
+        List<ScoreBoardES> scores = new ArrayList<>();
+        ScoreBoardES demo = ScoreBoardES.builder()
                 .matchId(1L)
                 .playerId(1L)
                 .build();
         scores.add(demo);
-        when(scoreBoardRepository.findAll()).thenReturn(scores);
+        when(scoreBoardESRepository.findAll()).thenReturn(scores);
         Assert.assertEquals(demo,scoreBoardService.getRecord(1L,1L));
         Assert.assertEquals(null,scoreBoardService.getRecord(1L,2L));
     }

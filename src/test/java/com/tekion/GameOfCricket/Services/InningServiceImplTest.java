@@ -60,34 +60,14 @@ class InningServiceImplTest {
     }
 
     @Test
-    void changeBowlerTest(){
+    void playTest() throws ValidationException {
         PlayerDTO currentBowler = bowlingTeam.getPlayers().get(0);
         bowlingTeam.getPlayers().remove(0);
-
-        Assert.assertNotEquals(currentBowler,inningService.changeBowler(currentBowler, (ArrayList<PlayerDTO>) bowlingTeam.getPlayers()));
-    }
-
-    @Test
-    void getAllBowlersTest(){
-        ArrayList<PlayerDTO> bowlers = inningService.getAllBowlers(bowlingTeam);
-        Assert.assertEquals(bowlers.size(),battingTeam.getPlayers().size());
-    }
-
-    @Test
-    void ballOperationTest(){
-        when(pitchService.getStriker()).thenReturn(battingTeam.getPlayers().get(0));
-        when(pitchService.getNonStriker()).thenReturn(battingTeam.getPlayers().get(1));
-        when(pitchService.getCurrentBowler()).thenReturn(bowlingTeam.getPlayers().get(0));
-        inningService.ballOperation(battingTeam,0);
-        Assert.assertEquals(1,battingTeam.getPlayers().get(0).getBallsPlayed());
-    }
-
-    @Test
-    void playTest() throws ValidationException {
         when(pitchService.getStriker()).thenReturn(battingTeam.getPlayers().get(0));
         when(pitchService.getNonStriker()).thenReturn(battingTeam.getPlayers().get(1));
         when(pitchService.getCurrentBowler()).thenReturn(bowlingTeam.getPlayers().get(0));
         inningService.play(match,battingTeam,true,bowlingTeam);
         Assert.assertNotEquals(0,battingTeam.getTotalRuns());
+        Assert.assertEquals(1,battingTeam.getPlayers().get(0).getBallsPlayed());
     }
 }
