@@ -15,7 +15,7 @@ public interface SeriesService {
      * @throws MissingDataException if the given id is missing from the databse.
      * @throws ValidationException invalid data.
      */
-    void startSeries(Long id) throws MissingDataException, ValidationException;
+    Long startSeries(Long id) throws MissingDataException, ValidationException;
 
     /** gets the record of the series from the database.
      * @param id id the required series.

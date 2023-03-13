@@ -15,12 +15,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class MatchEntity extends BaseEntity{
-    @NotEmpty(message = "First Team ID Cannot be Empty")
+    @NotNull(message = "First Team ID Cannot be Empty")
     private Long firstTeamID;
-    @NotEmpty(message = "Second Team ID Cannot be Empty")
+    @NotNull(message = "Second Team ID Cannot be Empty")
     private Long secondTeamID;
     private Long winner;
-    @NotEmpty
     @Positive
     private int numberOfOvers;
     private Long seriesID;

@@ -15,14 +15,14 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class PlayerEntity extends BaseEntity{
-    @NotEmpty(message = "Player Name Cannot be Empty")
+    @NotNull(message = "Player Name Cannot be Empty")
     private String name;
     private int wicketsTaken;
     @Builder.Default
     private int runs = 0;
     @Builder.Default
     private int ballsPlayed = 0;
-    @NotEmpty
+    @NotNull
     private Long teamID;
     @NotNull
     @Pattern(regexp = "Batsman|Bowler", message = "Invalid player role. Must be either Batsman or Bowler.")

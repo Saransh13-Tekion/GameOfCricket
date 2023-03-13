@@ -15,10 +15,10 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class TeamEntity extends BaseEntity{
-    @NotEmpty(message = "Team name Cannot be Empty")
+    @NotNull(message = "Team name Cannot be Empty")
     private String teamName;
     @Positive
-    @NotEmpty
+    @NotNull
     private int totalMatches;
     private int matchesWon;
 }

@@ -2,6 +2,7 @@ package com.tekion.GameOfCricket.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
@@ -13,16 +14,16 @@ import lombok.NoArgsConstructor;
 @Table(name = "Series")
 @EqualsAndHashCode(callSuper=false)
 public class SeriesEntity extends BaseEntity{
-    @NotEmpty(message = "First Team ID Cannot be Empty")
+    @NotNull(message = "First Team ID Cannot be Empty")
     private Long firstTeamID;
-    @NotEmpty(message = "Second Team ID Cannot be Empty")
+    @NotNull(message = "Second Team ID Cannot be Empty")
     private Long secondTeamID;
     private Long winner;
     @Positive
-    @NotEmpty
+    @NotNull
     private int numberOfOvers;
     @Positive
-    @NotEmpty
+    @NotNull
     private int numberOfMatches;
     private int matchesFirstTeamWon;
     private int matchesSecondTeamWon;

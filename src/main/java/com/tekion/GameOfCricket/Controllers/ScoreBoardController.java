@@ -1,6 +1,7 @@
 package com.tekion.GameOfCricket.Controllers;
 
 import com.tekion.GameOfCricket.ElasticSearchDocuments.ScoreBoardES;
+import com.tekion.GameOfCricket.Entity.ScoreBoardEntity;
 import com.tekion.GameOfCricket.Services.ScoreBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

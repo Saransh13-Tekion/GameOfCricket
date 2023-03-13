@@ -15,11 +15,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ScoreBoardEntity extends BaseEntity{
-    @NotEmpty(message = "Team ID field cannot be Empty")
+    @NotNull(message = "Team ID field cannot be Empty")
     private Long teamId;
-    @NotEmpty(message = "Match ID field cannot be Empty")
+    @NotNull(message = "Match ID field cannot be Empty")
     private Long matchId;
-    @NotEmpty(message = "Player ID field cannot be Empty")
+    @NotNull(message = "Player ID field cannot be Empty")
     private Long playerId;
     private int runsScored;
     private int wicketsTaken;
