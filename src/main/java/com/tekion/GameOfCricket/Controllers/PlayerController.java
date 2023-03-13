@@ -3,6 +3,7 @@ package com.tekion.GameOfCricket.Controllers;
 import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Services.PlayerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class PlayerController {
      * @return
      */
     @PostMapping("/")
-    public ResponseDTO add(@RequestBody List<PlayerEntity>players){
+    public ResponseDTO add(@Valid @RequestBody List<PlayerEntity>players){
         playerService.addPlayer(players);
         return new ResponseDTO(true,"none");
     }

@@ -2,10 +2,9 @@ package com.tekion.GameOfCricket.Controllers;
 
 import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
-import com.tekion.GameOfCricket.Exception.MissingDataException;
-import com.tekion.GameOfCricket.Exception.ValidationException;
+import com.tekion.GameOfCricket.Exception.*;
 import com.tekion.GameOfCricket.Services.MatchService;
-import com.tekion.GameOfCricket.Services.TeamService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +32,8 @@ public class MatchController {
      * @return the response
      */
     @PostMapping("/create")
-    public ResponseDTO createMatch(@RequestBody MatchEntity matchEntity){
+    public ResponseDTO createMatch(@Valid @RequestBody MatchEntity matchEntity){
+
         matchService.createMatch(matchEntity);
         return new ResponseDTO(true,"none");
     }

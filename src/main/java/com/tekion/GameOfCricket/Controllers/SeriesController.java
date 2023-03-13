@@ -5,6 +5,7 @@ import com.tekion.GameOfCricket.Entity.SeriesEntity;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
 import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Services.SeriesService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class SeriesController {
      * @param seriesEntity the entity that needs to be saved.
      */
     @PostMapping("/create")
-    public ResponseDTO create(@RequestBody SeriesEntity seriesEntity){
+    public ResponseDTO create(@Valid @RequestBody SeriesEntity seriesEntity){
         seriesService.createSeries(seriesEntity);
         return new ResponseDTO(true,"none");
     }

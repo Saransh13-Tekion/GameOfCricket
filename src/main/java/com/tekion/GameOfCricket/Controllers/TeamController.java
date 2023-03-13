@@ -5,6 +5,7 @@ import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.TeamEntity;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
 import com.tekion.GameOfCricket.Services.TeamService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class TeamController {
      * @param teams teams that are to be added in the database
      */
     @PostMapping("/")
-    public ResponseDTO addTeam(@RequestBody List<TeamEntity> teams){
+    public ResponseDTO addTeam(@Valid @RequestBody List<TeamEntity> teams){
         teamService.addTeam(teams);
         return new ResponseDTO(true,"none");
     }
