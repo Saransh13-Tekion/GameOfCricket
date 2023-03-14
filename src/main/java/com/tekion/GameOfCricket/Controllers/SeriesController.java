@@ -1,11 +1,13 @@
 package com.tekion.GameOfCricket.Controllers;
 
-import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.SeriesEntity;
 import com.tekion.GameOfCricket.Exception.MissingDataException;
 import com.tekion.GameOfCricket.Exception.ValidationException;
 import com.tekion.GameOfCricket.Services.SeriesService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,9 +21,9 @@ public class SeriesController {
      * @param seriesEntity the entity that needs to be saved.
      */
     @PostMapping("/create")
-    public ResponseDTO create(@RequestBody SeriesEntity seriesEntity){
+    public ResponseEntity create(@Valid @RequestBody SeriesEntity seriesEntity){
         seriesService.createSeries(seriesEntity);
-        return new ResponseDTO(true,"none");
+        return ResponseEntity.status(HttpStatus.OK).body(seriesEntity);
     }
 
     /** starts the series
@@ -30,9 +32,18 @@ public class SeriesController {
      * @throws ValidationException invalid data.
      */
     @PostMapping("/start/{id}")
-    public ResponseDTO start(@PathVariable Long id) throws ValidationException, MissingDataException {
-        seriesService.startSeries(id);
-        return new ResponseDTO(true,"none");
+    public ResponseEntity start(@PathVariable Long id) {
+        Long winnerId;
+        try {
+            winnerId = seriesService.startSeries(id);
+        }
+        catch (MissingDataException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        catch (ValidationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Id of Winning Team is " + winnerId);
     }
 
     /** gets the record of the series from the database.

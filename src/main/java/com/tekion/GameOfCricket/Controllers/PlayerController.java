@@ -1,9 +1,11 @@
 package com.tekion.GameOfCricket.Controllers;
 
-import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.PlayerEntity;
 import com.tekion.GameOfCricket.Services.PlayerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +22,9 @@ public class PlayerController {
      * @return
      */
     @PostMapping("/")
-    public ResponseDTO add(@RequestBody List<PlayerEntity>players){
+    public ResponseEntity add(@Valid @RequestBody List<PlayerEntity>players){
         playerService.addPlayer(players);
-        return new ResponseDTO(true,"none");
+        return ResponseEntity.status(HttpStatus.OK).body(players);
     }
 
     /** This method gets the required player from the database

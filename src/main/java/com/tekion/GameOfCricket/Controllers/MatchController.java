@@ -1,12 +1,12 @@
 package com.tekion.GameOfCricket.Controllers;
 
-import com.tekion.GameOfCricket.DTO.ResponseDTO;
 import com.tekion.GameOfCricket.Entity.MatchEntity;
-import com.tekion.GameOfCricket.Exception.MissingDataException;
-import com.tekion.GameOfCricket.Exception.ValidationException;
+import com.tekion.GameOfCricket.Exception.*;
 import com.tekion.GameOfCricket.Services.MatchService;
-import com.tekion.GameOfCricket.Services.TeamService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,9 +23,19 @@ public class MatchController {
      * @throws MissingDataException
      */
     @PostMapping("/start/{matchId}")
-    public ResponseDTO start(@PathVariable Long matchId) throws ValidationException, MissingDataException {
-        matchService.startMatch(matchId);
-        return new ResponseDTO(true,"none");
+    public ResponseEntity start(@PathVariable Long matchId){
+        Long winnerId;
+        try {
+           winnerId =  matchService.startMatch(matchId);
+        }
+        catch (MissingDataException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        catch (ValidationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Id of Winning Team is " + winnerId);
     }
 
     /** Create the match record
@@ -33,9 +43,9 @@ public class MatchController {
      * @return the response
      */
     @PostMapping("/create")
-    public ResponseDTO createMatch(@RequestBody MatchEntity matchEntity){
+    public ResponseEntity createMatch(@Valid @RequestBody MatchEntity matchEntity){
         matchService.createMatch(matchEntity);
-        return new ResponseDTO(true,"none");
+        return ResponseEntity.status(HttpStatus.OK).body(matchEntity);
     }
 
     /** Get the records of the required match

@@ -26,7 +26,6 @@ dependencies {
 	implementation 'com.github.javafaker:javafaker:1.0.2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.jetbrains:annotations:23.0.0'
-	implementation 'org.elasticsearch:elasticsearch:7.15.1'
 	implementation 'log4j:log4j:1.2.17'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'jakarta.json:jakarta.json-api:2.1.1'
@@ -35,7 +34,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
 }
 
 tasks.named('test') {

@@ -33,7 +33,7 @@ public class SeriesServiceImpl implements SeriesService{
     }
 
     @Override
-    public void startSeries(Long id) throws MissingDataException, ValidationException {
+    public Long startSeries(Long id) throws MissingDataException, ValidationException {
         log.info("Starting Series of id " + id);
         SeriesEntity seriesEntity = seriesRepository.findById(id).orElseThrow(() -> new MissingDataException("Cannot find given series entity"));
         int firstTeamWin = 0,secondTeamWin = 0;
@@ -59,5 +59,6 @@ public class SeriesServiceImpl implements SeriesService{
         seriesEntity.setUpdatedAt(LocalDateTime.now());
         seriesRepository.save(seriesEntity);
         log.info("Exiting the Start Series method of id " + id);
+        return seriesEntity.getWinner();
     }
 }
